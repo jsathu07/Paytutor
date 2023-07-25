@@ -26,6 +26,7 @@ const styles = StyleSheet.create({
     checkboxContainer: {
         padding: 0,
         marginLeft: wp("7%"),
+        marginTop: hp("5%")
     },
     checkboxText: {
         fontFamily: font.bold,

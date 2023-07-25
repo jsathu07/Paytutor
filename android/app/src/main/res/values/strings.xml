@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Paytutor</string>
+    <string moduleConfig="true" name="CodePushDeploymentKey">ACSBfBkBp3WAMG6FdwPHjQiv7RyxZ3qadzBjC</string>
 </resources>

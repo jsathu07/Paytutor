@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { SafeAreaView, StyleSheet, View, Text, ScrollView, StatusBar, Image, FlatList, ActivityIndicator } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { SafeAreaView, StyleSheet, View, Text, ScrollView, StatusBar, Image, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { useSelector } from "react-redux";
 import { CameraScreen } from 'react-native-camera-kit';
@@ -9,8 +9,12 @@ import { color, font } from '../../utils/theme';
 import Subject from '../../components/Subject';
 import TransItem from '../../components/TransItem';
 import NavBar from '../../components/NavBar';
+import ActionSheet from "react-native-actions-sheet";
+import Card from '../../components/Card';
 
-const PaymentScreen = ({ navigation }) => {
+const PaymentScreen = ({ navigation, route }) => {
+
+    const actionSheetRef = useRef(null);
 
     const [camera, setCamera] = useState(true);
     const [total, setTotal] = useState(0);
@@ -78,6 +82,15 @@ const PaymentScreen = ({ navigation }) => {
     }
 
     useEffect(() => {
+        const mode = route.params.mode;
+        if (mode === "Camera") {
+            setCamera(true);
+        } else {
+            getData(route.params.id);
+        }
+    }, [route])
+
+    useEffect(() => {
     }, [studentData, userData, tutorData, classData])
 
     if (isLoading) {
@@ -109,7 +122,7 @@ const PaymentScreen = ({ navigation }) => {
                     <Text style={styles.title0}>Payment for class</Text>
 
                     <View style={{ marginTop: hp("2%") }}>
-                        <TransItem name={student.name} date={student.phone} isMoney={false} />
+                        <TransItem onPress={() => { actionSheetRef.current.show() }} name={student.name} date={student.phone} isMoney={false} />
                     </View>
 
                     <View style={{ marginTop: hp("2%"), padding: wp("4%"), width: wp("90%"), backgroundColor: color.white1, borderRadius: 12, alignSelf: "center" }}>
@@ -131,6 +144,10 @@ const PaymentScreen = ({ navigation }) => {
                                 <Button style={{ marginTop: hp("5%") }} text="Print receipt" />
                             )
                     }
+
+                    <ActionSheet containerStyle={{ paddingTop: hp("4%") }} ref={actionSheetRef}>
+                        <Card img={userData.img} text1={student.name} text2={userData.name} />
+                    </ActionSheet>
 
                     <View style={{ height: hp("10%") }}></View>
                     <StatusBar backgroundColor={color.blue0} />

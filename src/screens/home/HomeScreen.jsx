@@ -22,12 +22,12 @@ const HomeScreen = ({ navigation }) => {
         <SafeAreaView style={styles.container}>
             <View style={styles.topContainer}>
                 <Header img={userData !== undefined ? userData.img : ""} text={userData !== undefined ? userData.name : ""} />
-                <Image style={{ width: wp("60%"), height: wp("30%") }} source={require("../../../logo.png")} />
+                <Image style={{ width: wp("60%"), height: wp("20%") }} source={require("../../../logo.png")} />
             </View>
             <View style={styles.bottomContainer}>
                 <View style={styles.textContainer}>
                     <Text style={styles.title}>Recent transactions</Text>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => { navigation.navigate("Transaction") }}>
                         <Text style={styles.subtitle}>Show all</Text>
                     </TouchableOpacity>
                 </View>
@@ -46,7 +46,7 @@ const HomeScreen = ({ navigation }) => {
                     placement="right"
                     icon={{ type: "ionicon", name: "scan-outline", color: color.white0 }}
                     size="large"
-                    onPress={() => { navigation.navigate("Payment") }}
+                    onPress={() => { navigation.navigate("Payment", { mode: "Camera", id: "" }) }}
                     iconContainerStyle={{ backgroundColor: color.blue0 }}
                 />
             </View>
@@ -62,7 +62,8 @@ const styles = StyleSheet.create({
     },
     topContainer: {
         backgroundColor: color.blue0,
-        alignItems: "center"
+        alignItems: "center",
+        paddingBottom: hp("5%")
     },
     bottomContainer: {
         flex: 1.5,

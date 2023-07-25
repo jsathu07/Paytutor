@@ -83,6 +83,7 @@ const MainScreen = () => {
             initialRouteName="Home"
             screenOptions={({ route }) => ({
                 headerShown: false,
+                tabBarShowLabel: false,
                 tabBarHideOnKeyboard: true,
                 tabBarActiveTintColor: color.blue0,
                 tabBarLabelStyle: {

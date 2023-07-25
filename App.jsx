@@ -8,6 +8,7 @@ import MainScreen from './src/screens/home/MainScreen';
 import PaymentScreen from './src/screens/home/PaymentScreen';
 import ClassRegisterScreen from './src/screens/home/ClassRegisterScreen';
 import ClassDetailScreen from './src/screens/home/ClassDetailScreen';
+import TransactionScreen from './src/screens/home/TransactionScreen';
 
 import { color, font } from './src/utils/theme';
 import { View } from 'react-native';
@@ -19,6 +20,7 @@ import SplashScreen from 'react-native-splash-screen';
 import { Provider } from 'react-redux';
 import store from './src/store/store';
 import auth from '@react-native-firebase/auth';
+import codePush from "react-native-code-push";
 
 const Stack = createNativeStackNavigator();
 
@@ -68,6 +70,7 @@ const App = () => {
               <Stack.Screen name="Payment" component={PaymentScreen} />
               <Stack.Screen name="ClassRegister" component={ClassRegisterScreen} />
               <Stack.Screen name="ClassDetail" component={ClassDetailScreen} />
+              <Stack.Screen name="Transaction" component={TransactionScreen} />
             </Stack.Navigator>
           </NavigationContainer>
           <DropdownAlert
@@ -82,4 +85,4 @@ const App = () => {
   }
 }
 
-export default App;
+export default codePush(App);

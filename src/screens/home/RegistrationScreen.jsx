@@ -9,8 +9,6 @@ import Picker from "../../components/Picker";
 import DropDownHolder from "../../utils/Dropdown";
 import { color, font } from '../../utils/theme';
 import Card from "../../components/Card";
-import Share from 'react-native-share';
-import ViewShot from "react-native-view-shot";
 import NavBar from "../../components/NavBar";
 
 const RegistrationScreen = ({ navigation }) => {
@@ -31,10 +29,16 @@ const RegistrationScreen = ({ navigation }) => {
 
     const registerStudent = async () => {
         try {
-            setIsLoading(true);
-            if (name === "" || phone === "" || enrolledClass.length === 0) {
-                throw new Error("error");
+            if (name === "" || enrolledClass.length === 0) {
+                DropDownHolder.dropDown.alertWithType("error", "Missing details", "Please enter all details!");
+                return;
             }
+            let phoneRg = /^07[0125678]\d{7}$/;
+            if (phone.match(phoneRg) === null) {
+                DropDownHolder.dropDown.alertWithType("error", "Invalid phone number", "Please enter a valid phone number!");
+                return;
+            }
+            setIsLoading(true);
             const result = await firestore().collection("User").doc(userData.uid).collection("Student").add({ name: name.trim(), phone, last_payment: null })
             enrolledClass.forEach(async (classId) => {
                 await firestore().collection("User").doc(userData.uid).collection("Student").doc(result.id).collection("EnrolledClass").doc(classId).set({ enrolledDate: firestore.FieldValue.serverTimestamp(), id: result.id })
@@ -47,10 +51,10 @@ const RegistrationScreen = ({ navigation }) => {
             setId(result.id);
             setIsLoading(false);
             setShowQR(true);
-            DropDownHolder.dropDown.alertWithType("success", "Student added successfully", "yes done");
+            DropDownHolder.dropDown.alertWithType("success", "Success", "Student has been added successfully!");
         } catch (error) {
             setIsLoading(false);
-            console.log(error);
+            DropDownHolder.dropDown.alertWithType("error", "Operation failed", "Please restart the app and try again!");
         }
     }
 
@@ -63,7 +67,7 @@ const RegistrationScreen = ({ navigation }) => {
 
     useEffect(() => {
         getClassList();
-    }, [classData,userData])
+    }, [classData, userData])
 
     if (isLoading) {
         return (
@@ -80,10 +84,7 @@ const RegistrationScreen = ({ navigation }) => {
                             <View>
                                 <NavBar text="Back" onPress={() => { setId(""); setShowQR(false); setName("") }} />
                                 <View style={{ marginTop: hp("10%"), borderWidth: 0 }}>
-                                    <ViewShot ref={ref} options={{ fileName: id, format: "png", quality: 1 }}>
-                                        <Card value={id} text1={name} text2={userData.name} />
-                                    </ViewShot>
-                                    <Button style={{ marginTop: hp("6%") }} onPress={() => { ref.current.capture().then(async (e) => { await Share.open({ message: "Hello", url: e }) }) }} text="Share" />
+                                    <Card img={userData.img} value={id} text1={name} text2={userData.name} />
                                 </View>
                             </View>
                         )
@@ -92,7 +93,7 @@ const RegistrationScreen = ({ navigation }) => {
                                 <View>
                                     <Image style={{ width: wp("50%"), height: wp("50%"), alignSelf: "center", marginTop: hp("2%") }} source={require("../../assets/images/post.png")} />
 
-                                    <Text style={styles.title0}>Register a student</Text>
+                                    <Text style={styles.title0}>Student registration</Text>
 
                                     <View style={styles.textBox}>
                                         <Text style={styles.text0}>Name</Text>

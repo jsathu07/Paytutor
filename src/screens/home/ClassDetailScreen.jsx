@@ -58,7 +58,7 @@ const ClassDetailScreen = ({ navigation, route }) => {
 
     useEffect(() => {
         getData();
-    }, [route.params.id])
+    }, [route.params.id, studentData])
 
     return (
         <SafeAreaView style={{ backgroundColor: color.white0, flex: 1 }}>
@@ -89,20 +89,18 @@ const ClassDetailScreen = ({ navigation, route }) => {
                     (
                         <FlatList
                             data={userList}
-                            renderItem={({ item }) => <UserItem status={item.status} name={item.name} />}
+                            renderItem={({ item }) => <UserItem onPress={() => { navigation.navigate("Payment", { mode: "Normal", id: item.id }) }} status={item.status} name={item.name} />}
                             keyExtractor={(item) => item.id}
                         />
                     )
                     : (
                         <FlatList
                             data={filteredUserList}
-                            renderItem={({ item }) => <UserItem status={item.status} name={item.name} />}
+                            renderItem={({ item }) => <UserItem onPress={() => { navigation.navigate("Payment", { mode: "Normal", id: item.id }) }} status={item.status} name={item.name} />}
                             keyExtractor={(item) => item.id}
                         />
                     )
             }
-
-
 
             <View style={{ height: hp("2%") }}></View>
 

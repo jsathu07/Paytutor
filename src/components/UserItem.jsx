@@ -3,9 +3,9 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import UserAvatar from 'react-native-user-avatar';
 import { color, font, scheme } from "../utils/theme";
 
-const UserItem = ({ name, status }) => {
+const UserItem = ({ name, status, onPress = () => null }) => {
     return (
-        <TouchableOpacity>
+        <TouchableOpacity onPress={onPress}>
             <View style={styles.itemContainer}>
                 <View style={{ flexDirection: "row", alignItems: "center" }}>
                     <UserAvatar bgColors={scheme} size={wp("10%")} name={name} />

@@ -2,12 +2,15 @@ import { useState } from "react";
 import { SafeAreaView, StyleSheet, View, Text, ScrollView, StatusBar, Image, ActivityIndicator } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import auth from '@react-native-firebase/auth';
+import ImagePicker from 'react-native-image-crop-picker';
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 import Button from "../../components/Button";
 import Input from "../../components/Input";
 import CheckBox from '../../components/Checkbox';
-import ImagePicker from 'react-native-image-crop-picker';
+import Option from "../../components/Option";
+import Loader from "../../components/Loader";
+import DropDownHolder from "../../utils/Dropdown";
 import { color, font } from '../../utils/theme';
 
 const SignUpScreen = ({ navigation }) => {
@@ -21,14 +24,28 @@ const SignUpScreen = ({ navigation }) => {
     const [isLoading, setIsLoading] = useState(false);
 
     const openGallery = async () => {
-        const result = await ImagePicker.openPicker({ cropping: true })
-        setSelectedImg(result.path)
+        try {
+            const result = await ImagePicker.openPicker({ cropping: true })
+            setSelectedImg(result.path)
+        } catch (error) {
+            // DropDownHolder.dropDown.alertWithType("error", "Gallery permission required", "Please allow to access your gallery");
+        }
     }
 
     const SignUp = async () => {
         try {
-            if (email === "" || password === "" || phone === "" || name === "" || selectedImg === "" || !checked) {
-                throw new Error("empty");
+            if (email === "" || password === "" || phone === "" || name === "" || selectedImg === "") {
+                DropDownHolder.dropDown.alertWithType("error", "User details required", "Please enter your details!");
+                return;
+            }
+            if (!checked) {
+                DropDownHolder.dropDown.alertWithType("error", "Accept privacy policy", "Please accept the privacy policy!");
+                return;
+            }
+            let phoneRg = /^07[0125678]\d{7}$/;
+            if (phone.match(phoneRg) === null) {
+                DropDownHolder.dropDown.alertWithType("error", "Invalid phone number", "Please enter a valid phone number!");
+                return;
             }
             setIsLoading(true);
             const authResult = await auth().createUserWithEmailAndPassword(email, password);
@@ -39,7 +56,7 @@ const SignUpScreen = ({ navigation }) => {
                 uid: authResult.user.uid,
                 email,
                 password,
-                name,
+                name: name.trim(),
                 phone,
                 img: url
             }
@@ -47,23 +64,22 @@ const SignUpScreen = ({ navigation }) => {
             setIsLoading(false);
         } catch (error) {
             setIsLoading(false);
-            console.log(error)
             if (error.code === "auth/email-already-in-use") {
-                alert("EMAIL ALREADY IN USE")
+                DropDownHolder.dropDown.alertWithType("error", "Email already used", "Please sign up using a new email address!");
             }
             if (error.code === "auth/invalid-email") {
-                alert("INVALID EMAIL")
+                DropDownHolder.dropDown.alertWithType("error", "Email is invalid", "Please enter a valid email!");
             }
             if (error.code === "auth/weak-password") {
-                alert("WEAK PASSWORD")
+                DropDownHolder.dropDown.alertWithType("error", "Weak password", "Please enter a strong password!");
             }
         }
     }
 
     if (isLoading) {
-        <SafeAreaView style={{ backgroundColor: color.white0, flex: 1, alignItems: "center", justifyContent: "center" }}>
-            <ActivityIndicator color={color.blue0} size="large" />
-        </SafeAreaView>
+        return (
+            <Loader />
+        )
     } else {
         return (
             <SafeAreaView style={styles.container}>
@@ -73,7 +89,7 @@ const SignUpScreen = ({ navigation }) => {
                         <Image style={{ width: wp("40%"), height: wp("15%"), alignSelf: "center" }} source={require("../../../logo.png")} />
                     </View>
 
-                    <View style={{ height: hp("100%"), borderColor: color.white0, borderWidth: 1, borderTopRightRadius: 25, borderTopLeftRadius: 25, backgroundColor: color.white0 }}>
+                    <View style={{ borderColor: color.white0, borderWidth: 1, borderTopRightRadius: 25, borderTopLeftRadius: 25, backgroundColor: color.white0 }}>
 
                         <Text style={styles.title0}>Sign up for an account</Text>
 
@@ -86,13 +102,15 @@ const SignUpScreen = ({ navigation }) => {
                             <Input placeholder="Enter your password ..." type="password" value={password} onChangeText={(password) => { setPassword(password) }} />
                             <Text style={styles.text0}>Phone</Text>
                             <Input placeholder="07xxxxxxxx" type="phone" value={phone} onChangeText={(phone) => { setPhone(phone) }} keyboardType="phone-pad" />
+                            <Text style={styles.text0}>Logo</Text>
+                            <Option onPress={() => { openGallery() }} checked={selectedImg !== "" ? true : false} />
                         </View>
-
-                        <CheckBox onPress={() => { openGallery() }} checked={selectedImg !== "" ? true : false} text="Upload Image" />
 
                         <CheckBox checked={checked} text="Accept terms and conditions" onPress={() => { setChecked(!checked) }} />
 
                         <Button style={{ marginTop: hp("5%") }} onPress={SignUp} text="Sign Up" />
+
+                        <View style={{ height: hp("10%") }}></View>
                     </View>
 
                     <StatusBar backgroundColor={color.blue0} />

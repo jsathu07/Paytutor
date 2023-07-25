@@ -9,6 +9,7 @@ import Picker from "../../components/Picker";
 import NavBar from "../../components/NavBar";
 import { color, font } from '../../utils/theme';
 import TextClick from "../../components/TextClick";
+import DropDownHolder from "../../utils/Dropdown";
 
 const ClassRegisterScreen = ({ navigation }) => {
 
@@ -26,35 +27,39 @@ const ClassRegisterScreen = ({ navigation }) => {
 
     const registerTeacher = async () => {
         try {
-            setIsLoading(true);
             if (tutorName === "") {
-                throw new Error("error");
+                DropDownHolder.dropDown.alertWithType("error", "Invalid name", "Please enter a valid name!");
+                return;
             }
+            setIsLoading(true);
             await firestore().collection("User").doc(userData.uid).collection("Tutor").add({ name: tutorName.trim() });
             const d = await getTutorList();
             setTutorList(d);
             setTutorName("");
             setIsLoading(false);
+            DropDownHolder.dropDown.alertWithType("success", "Success", "Tutor has been added successfully!");
         } catch (error) {
-            setIsLoading(false)
-            console.log(error)
+            setIsLoading(false);
+            DropDownHolder.dropDown.alertWithType("error", "Operation failed", "Please restart the app and try again!");
         }
     }
 
     const registerClass = async () => {
         try {
-            setIsLoading(true);
-            if (name === "" || fee === "" || selectedTutor === "") {
-                throw new Error("error");
+            if (name === "" || parseInt(fee) <= 0 || selectedTutor === "") {
+                DropDownHolder.dropDown.alertWithType("error", "Missing details", "Please enter all details!");
+                return;
             }
+            setIsLoading(true);
             await firestore().collection("User").doc(userData.uid).collection("Class").add({ name: name.trim(), fee: parseInt(fee), tutor: selectedTutor });
             setSelectedTutor("");
             setName("");
             setFee("");
             setIsLoading(false);
+            DropDownHolder.dropDown.alertWithType("success", "Success", "Class has been added successfully!");
         } catch (error) {
             setIsLoading(false);
-            console.log(error);
+            DropDownHolder.dropDown.alertWithType("error", "Operation failed", "Please restart the app and try again!");
         }
     }
 
@@ -86,6 +91,8 @@ const ClassRegisterScreen = ({ navigation }) => {
                     {
                         isClass ? (
                             <View>
+                                <TextClick onPress={() => { setIsClass(false); }} text1="Want to register a tutor?" text2="Register" />
+
                                 <Text style={styles.title0}>Register a class</Text>
 
                                 <View style={styles.textBox}>
@@ -103,7 +110,6 @@ const ClassRegisterScreen = ({ navigation }) => {
 
                                 <Button text="Register class" onPress={registerClass} />
 
-                                <TextClick onPress={() => { setIsClass(false); }} text1="Want to register a tutor?" text2="Register" />
                             </View>
                         )
                             : (
@@ -112,7 +118,7 @@ const ClassRegisterScreen = ({ navigation }) => {
 
                                     <View style={styles.textBox}>
                                         <Text style={styles.text0}>Name</Text>
-                                        <Input type="text" onChangeText={(tutorName) => { setTutorName(tutorName) }} value={tutorName} />
+                                        <Input placeholder="Enter tutor name ..." type="text" onChangeText={(tutorName) => { setTutorName(tutorName) }} value={tutorName} />
                                     </View>
 
                                     <Button text="Register tutor" onPress={registerTeacher} />
@@ -144,7 +150,7 @@ const styles = StyleSheet.create({
         fontSize: wp("5%"),
         color: color.black0,
         fontFamily: font.semibold,
-        marginTop: hp("3%"),
+        marginTop: hp("4%"),
         marginLeft: wp("7%")
     },
     textBox: {
