@@ -38,7 +38,7 @@ const ClassDetailScreen = ({ navigation, route }) => {
         const temp = [];
         result.forEach((d) => {
             let status = studentData[d.id].last_payment;
-            if (status !== undefined) {
+            if (status !== null) {
                 if (new Date(status).getMonth() === new Date().getMonth()) {
                     status = true;
                 } else {

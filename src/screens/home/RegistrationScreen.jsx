@@ -35,7 +35,7 @@ const RegistrationScreen = ({ navigation }) => {
             if (name === "" || phone === "" || enrolledClass.length === 0) {
                 throw new Error("error");
             }
-            const result = await firestore().collection("User").doc(userData.uid).collection("Student").add({ name: name.trim(), phone })
+            const result = await firestore().collection("User").doc(userData.uid).collection("Student").add({ name: name.trim(), phone, last_payment: null })
             enrolledClass.forEach(async (classId) => {
                 await firestore().collection("User").doc(userData.uid).collection("Student").doc(result.id).collection("EnrolledClass").doc(classId).set({ enrolledDate: firestore.FieldValue.serverTimestamp(), id: result.id })
                 await firestore().collection("User").doc(userData.uid)
@@ -63,7 +63,7 @@ const RegistrationScreen = ({ navigation }) => {
 
     useEffect(() => {
         getClassList();
-    }, [classData])
+    }, [classData,userData])
 
     if (isLoading) {
         return (
@@ -96,9 +96,9 @@ const RegistrationScreen = ({ navigation }) => {
 
                                     <View style={styles.textBox}>
                                         <Text style={styles.text0}>Name</Text>
-                                        <Input type="text" value={name} onChangeText={(name) => { setName(name) }} />
+                                        <Input placeholder="Enter student name ..." type="text" value={name} onChangeText={(name) => { setName(name) }} />
                                         <Text style={styles.text0}>Phone</Text>
-                                        <Input keyboardType="phone-pad" type="phone" value={phone} onChangeText={(phone) => { setPhone(phone) }} />
+                                        <Input placeholder="07xxxxxxxx" keyboardType="phone-pad" type="phone" value={phone} onChangeText={(phone) => { setPhone(phone) }} />
                                         <Text style={styles.text0}>Class</Text>
                                         <Picker onOpen={() => { setIsScrollEnabled(false) }} onClose={() => { setIsScrollEnabled(true) }} placeholder="Select a class ..." val={enrolledClass} max={null} data={classList} onChangeValue={(enrolledClass) => { setEnrolledClass(enrolledClass) }} />
                                     </View>

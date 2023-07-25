@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { SafeAreaView, StyleSheet, View, Text, ScrollView, StatusBar, Image, FlatList } from 'react-native';
+import { SafeAreaView, StyleSheet, View, Text, ScrollView, StatusBar, Image, FlatList, ActivityIndicator } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { useSelector } from "react-redux";
 import { CameraScreen } from 'react-native-camera-kit';
@@ -17,6 +17,7 @@ const PaymentScreen = ({ navigation }) => {
     const [enrolledClasses, setEnrolledClasses] = useState([]);
     const [status, setStatus] = useState(false);
     const [student, setStudent] = useState({ name: "", phone: "" });
+    const [isLoading, setIsLoading] = useState(false);
     const [id, setId] = useState("");
 
     const studentData = useSelector((state) => state.student.data);
@@ -24,7 +25,22 @@ const PaymentScreen = ({ navigation }) => {
     const userData = useSelector((state) => state.user.data);
     const tutorData = useSelector((state) => state.data.tutor);
 
+    const getStatus = (t) => {
+        let s = studentData[t].last_payment;
+        if (s !== null) {
+            if (new Date(studentData[t].last_payment).getMonth() === new Date().getMonth()) {
+                s = true;
+            } else {
+                s = false;
+            }
+        } else {
+            s = false;
+        }
+        setStatus(s);
+    }
+
     const payFee = async () => {
+        setIsLoading(true);
         await firestore().collection("User").doc(userData.uid).collection("Student").doc(id)
             .update({
                 last_payment: new Date().getTime()
@@ -35,23 +51,16 @@ const PaymentScreen = ({ navigation }) => {
             id,
             value: total
         })
+        setStatus(true);
+        setIsLoading(false)
     }
 
     const getData = async (t) => {
-        let s = studentData[t].last_payment;
-        if (s !== undefined) {
-            if (new Date(s).getMonth() === new Date().getMonth()) {
-                s = true;
-            } else {
-                s = false;
-            }
-        } else {
-            s = false
-        }
+        setIsLoading(true);
         setId(t);
         setCamera(false);
-        setStatus(s);
         setStudent({ name: studentData[t].name, phone: studentData[t].phone });
+        getStatus(t);
         const result = await firestore().collection("User").doc(userData.uid).collection("Student").doc(t).collection("EnrolledClass").get();
         let total = 0, temp = [];
         result.forEach((d) => {
@@ -65,16 +74,27 @@ const PaymentScreen = ({ navigation }) => {
         })
         setEnrolledClasses(temp);
         setTotal(total);
+        setIsLoading(false)
     }
 
-    if (camera) {
+    useEffect(() => {
+    }, [studentData, userData, tutorData, classData])
+
+    if (isLoading) {
+        return (
+            <SafeAreaView style={{ backgroundColor: color.white0, flex: 1, alignItems: "center", justifyContent: "center" }}>
+                <ActivityIndicator color={color.blue0} size="large" />
+            </SafeAreaView>
+        )
+    } else if (camera) {
         return (
             <SafeAreaView style={styles.container}>
                 <CameraScreen
                     scanBarcode={true}
                     onReadCode={(event) => { getData(event.nativeEvent.codeStringValue) }}
                     showFrame={true}
-                    laserColor="red"
+                    laserColor={color.red1}
+                    frameColor={color.blue0}
                 />
             </SafeAreaView>
         )
@@ -102,7 +122,14 @@ const PaymentScreen = ({ navigation }) => {
                     </View>
 
                     {
-                        !status && (<Button onPress={payFee} style={{ marginTop: hp("5%") }} text="Pay" />)
+                        !status ?
+                            (
+                                <Button onPress={payFee} style={{ marginTop: hp("5%") }} text="Pay" />
+                            )
+                            :
+                            (
+                                <Button style={{ marginTop: hp("5%") }} text="Print receipt" />
+                            )
                     }
 
                     <View style={{ height: hp("10%") }}></View>

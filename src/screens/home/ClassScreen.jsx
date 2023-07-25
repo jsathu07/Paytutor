@@ -38,7 +38,7 @@ const ClassScreen = ({ navigation }) => {
 
     useEffect(() => {
         getClassList();
-    }, [classData])
+    }, [classData, tutorData])
 
     return (
         <SafeAreaView style={{ backgroundColor: color.white0, flex: 1 }}>

@@ -29,7 +29,7 @@ const SignInScreen = ({ navigation }) => {
             <ScrollView>
 
                 <View style={{ backgroundColor: color.blue0, padding: wp("6%") }}>
-                    <Image style={{ width: wp("60%"), height: wp("30%"), alignSelf: "center" }} source={require("../../../logo.png")} />
+                    <Image style={{ width: wp("40%"), height: wp("15%"), alignSelf: "center" }} source={require("../../../logo.png")} />
                 </View>
 
                 <View style={{ height: hp("100%"), borderColor: color.white0, borderWidth: 1, borderTopRightRadius: 25, borderTopLeftRadius: 25, backgroundColor: color.white0 }}>
@@ -37,9 +37,9 @@ const SignInScreen = ({ navigation }) => {
 
                     <View style={styles.textBox}>
                         <Text style={styles.text0}>Email</Text>
-                        <Input type="email" onChangeText={(email) => { setEmail(email) }} value={email} />
+                        <Input placeholder="Enter your email ..." keyboardType="email-address" type="email" onChangeText={(email) => { setEmail(email) }} value={email} />
                         <Text style={styles.text0}>Your password</Text>
-                        <Input type="password" onChangeText={(password) => { setPassword(password) }} value={password} />
+                        <Input placeholder="Enter your password ..." type="password" onChangeText={(password) => { setPassword(password) }} value={password} />
                     </View>
 
                     <Button style={{ marginTop: hp("2%") }} onPress={SignIn} text="Sign In" />

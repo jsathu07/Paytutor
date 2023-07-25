@@ -16,13 +16,13 @@ const HomeScreen = ({ navigation }) => {
 
     useEffect(() => {
         setTransList(transData);
-    }, [transData])
+    }, [transData, userData])
 
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.topContainer}>
                 <Header img={userData !== undefined ? userData.img : ""} text={userData !== undefined ? userData.name : ""} />
-                <Image style={{ width: wp("100%"), height: wp("30%") }} source={require("../../../logo.png")} />
+                <Image style={{ width: wp("60%"), height: wp("30%") }} source={require("../../../logo.png")} />
             </View>
             <View style={styles.bottomContainer}>
                 <View style={styles.textContainer}>

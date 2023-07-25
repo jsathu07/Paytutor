@@ -65,6 +65,9 @@ const ClassRegisterScreen = ({ navigation }) => {
         })
     }
 
+    useEffect(() => {
+    }, [userData, tutorData])
+
     if (isLoading) {
         return (
             <SafeAreaView style={{ backgroundColor: color.white0, flex: 1, alignItems: "center", justifyContent: "center" }}>
@@ -87,9 +90,9 @@ const ClassRegisterScreen = ({ navigation }) => {
 
                                 <View style={styles.textBox}>
                                     <Text style={styles.text0}>Name</Text>
-                                    <Input type="text" onChangeText={(name) => { setName(name) }} value={name} />
+                                    <Input placeholder="Enter class name ..." type="text" onChangeText={(name) => { setName(name) }} value={name} />
                                     <Text style={styles.text0}>Fee</Text>
-                                    <Input keyboardType="number-pad" type="number" onChangeText={(fee) => { setFee(fee) }} value={fee} />
+                                    <Input placeholder="Enter class fee ..." keyboardType="number-pad" type="number" onChangeText={(fee) => { setFee(fee) }} value={fee} />
                                     <Text style={styles.text0}>Tutor</Text>
                                     <Picker onOpen={() => { setIsScrollEnabled(false) }} onClose={() => { setIsScrollEnabled(true) }} placeholder="Select a tutor ..." max={1} data={tutorList} value={tutorList} onChangeValue={(selectedTutor) => {
                                         if (selectedTutor.length > 0) {

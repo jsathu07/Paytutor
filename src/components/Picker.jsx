@@ -28,6 +28,7 @@ const CustomPicker = ({ data, onChangeValue, max, placeholder, onClose, onOpen }
             showTickIcon={true}
             multiple={true}
             items={items}
+            mode="BADGE"
             setValue={setValue}
             setOpen={setOpen}
             setItems={setItems}
