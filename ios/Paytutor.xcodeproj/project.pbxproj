@@ -14,6 +14,9 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		7699B88040F8A987B510C191 /* libPods-Paytutor-PaytutorTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-Paytutor-PaytutorTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		3A00EFA6AFFE41D1A89978AF /* PublicSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1735300DB53B48FAA3AF86E9 /* PublicSans-Bold.ttf */; };
+		826ECED77A53492994FF019C /* PublicSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 71600AD724ED48BABD308D49 /* PublicSans-Regular.ttf */; };
+		EE288241F6DA4E37B6992F8E /* PublicSans-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 053258E1C1714A1790D8B628 /* PublicSans-SemiBold.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +47,9 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Paytutor/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-Paytutor-PaytutorTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Paytutor-PaytutorTests.release.xcconfig"; path = "Target Support Files/Pods-Paytutor-PaytutorTests/Pods-Paytutor-PaytutorTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		1735300DB53B48FAA3AF86E9 /* PublicSans-Bold.ttf */ = {isa = PBXFileReference; name = "PublicSans-Bold.ttf"; path = "../src/assets/fonts/PublicSans-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		71600AD724ED48BABD308D49 /* PublicSans-Regular.ttf */ = {isa = PBXFileReference; name = "PublicSans-Regular.ttf"; path = "../src/assets/fonts/PublicSans-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		053258E1C1714A1790D8B628 /* PublicSans-SemiBold.ttf */ = {isa = PBXFileReference; name = "PublicSans-SemiBold.ttf"; path = "../src/assets/fonts/PublicSans-SemiBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +128,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
+				96879B29F5E64301967843A5 /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -147,6 +154,17 @@
 			);
 			path = Pods;
 			sourceTree = "<group>";
+		};
+		96879B29F5E64301967843A5 /* Resources */ = {
+			isa = "PBXGroup";
+			children = (
+				1735300DB53B48FAA3AF86E9 /* PublicSans-Bold.ttf */,
+				71600AD724ED48BABD308D49 /* PublicSans-Regular.ttf */,
+				053258E1C1714A1790D8B628 /* PublicSans-SemiBold.ttf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+			path = "";
 		};
 /* End PBXGroup section */
 
@@ -244,6 +262,9 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				3A00EFA6AFFE41D1A89978AF /* PublicSans-Bold.ttf in Resources */,
+				826ECED77A53492994FF019C /* PublicSans-Regular.ttf in Resources */,
+				EE288241F6DA4E37B6992F8E /* PublicSans-SemiBold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

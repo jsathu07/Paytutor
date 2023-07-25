@@ -1,0 +1,17 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "src/assets/fonts/PublicSans-Bold.ttf",
+      "sha1": "a805d85d6edba3346984295e045454bee10ae7cd"
+    },
+    {
+      "path": "src/assets/fonts/PublicSans-Regular.ttf",
+      "sha1": "8990fb39ee7552d65249572232afac1792462548"
+    },
+    {
+      "path": "src/assets/fonts/PublicSans-SemiBold.ttf",
+      "sha1": "7014d1f2b5b95479e78a517e3d69069aca990d9c"
+    }
+  ]
+}
