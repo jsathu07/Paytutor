@@ -29,7 +29,7 @@ const TransactionScreen = ({ navigation }) => {
 
     useEffect(() => {
         getData();
-    }, [])
+    }, [userData])
 
     if (isLoading) {
         return (

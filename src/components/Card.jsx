@@ -16,8 +16,7 @@ const Card = ({ text1, text2, value, img }) => {
         <View>
             <ViewShot ref={ref} options={{ fileName: value, format: "png", quality: 1 }}>
                 <View style={styles.container}>
-                    <Image style={{ resizeMode: "contain", width: wp("20%"), height: wp("10%"), alignSelf: "flex-end", marginTop: hp("1%"), marginRight: wp("2%") }} source={require("../assets/images/smallLogoBlue.png")} />
-                    <View style={{ marginTop: hp("4%"), backgroundColor: color.white1, padding: wp("6%"), borderRadius: 12, borderWidth: 0, borderStyle: "dashed" }}>
+                    <View style={{ marginTop: hp("5%"), backgroundColor: color.white1, padding: wp("6%"), borderRadius: 12, borderWidth: 0, borderStyle: "dashed" }}>
                         <Avatar rounded={true} containerStyle={{ marginTop: -45, alignSelf: "center" }} size={wp("12%")} source={{ uri: img }} />
                         <QRCode
                             value={value}
@@ -26,6 +25,7 @@ const Card = ({ text1, text2, value, img }) => {
                     </View>
                     <Text style={styles.innerTitle}>{text1}</Text>
                     <Text style={styles.innerTitleTwo}>{text2}</Text>
+                    <Image style={{ resizeMode: "center", width: wp("30%"), height: wp("20%"), alignSelf: "center", marginTop: hp("0%") }} source={require("../assets/images/smallLogoBlue.png")} />
                 </View>
             </ViewShot>
 
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
         fontSize: wp("3.5%"),
         color: color.grey0,
         fontFamily: font.semibold,
-        marginTop: hp("2%"),
+        marginTop: hp("1%"),
         marginBottom: hp("4%")
     },
 })

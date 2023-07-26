@@ -83,7 +83,7 @@ const RegistrationScreen = ({ navigation }) => {
                         showQR ? (
                             <View>
                                 <NavBar text="Back" onPress={() => { setId(""); setShowQR(false); setName("") }} />
-                                <View style={{ marginTop: hp("10%"), borderWidth: 0 }}>
+                                <View style={{ marginTop: hp("5%") }}>
                                     <Card img={userData.img} value={id} text1={name} text2={userData.name} />
                                 </View>
                             </View>

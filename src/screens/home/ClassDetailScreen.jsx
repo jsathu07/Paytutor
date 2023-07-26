@@ -7,6 +7,7 @@ import firestore from '@react-native-firebase/firestore';
 import { SearchBar } from '@rneui/base';
 import UserItem from "../../components/UserItem";
 import NavBar from "../../components/NavBar";
+import { FlashList } from "@shopify/flash-list";
 
 const ClassDetailScreen = ({ navigation, route }) => {
 
@@ -87,17 +88,19 @@ const ClassDetailScreen = ({ navigation, route }) => {
             {
                 !isFilter ?
                     (
-                        <FlatList
+                        <FlashList
                             data={userList}
                             renderItem={({ item }) => <UserItem onPress={() => { navigation.navigate("Payment", { mode: "Normal", id: item.id }) }} status={item.status} name={item.name} />}
                             keyExtractor={(item) => item.id}
+                            estimatedItemSize={500}
                         />
                     )
                     : (
-                        <FlatList
+                        <FlashList
                             data={filteredUserList}
                             renderItem={({ item }) => <UserItem onPress={() => { navigation.navigate("Payment", { mode: "Normal", id: item.id }) }} status={item.status} name={item.name} />}
                             keyExtractor={(item) => item.id}
+                            estimatedItemSize={500}
                         />
                     )
             }

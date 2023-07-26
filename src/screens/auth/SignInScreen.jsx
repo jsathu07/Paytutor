@@ -16,11 +16,12 @@ const SignInScreen = ({ navigation }) => {
     const SignIn = async () => {
         try {
             if (email === "" || password === "") {
-                throw new Error("empty")
+                DropDownHolder.dropDown.alertWithType("error", "User details required", "Please enter your details!");
+                return;
             }
             await auth().signInWithEmailAndPassword(email, password);
         } catch (error) {
-            console.log(error);
+            DropDownHolder.dropDown.alertWithType("error", "Sign in failed", "Please try again after some time!");
         }
     }
 

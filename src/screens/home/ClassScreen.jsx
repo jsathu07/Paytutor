@@ -5,6 +5,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import { useSelector } from "react-redux";
 import { SearchBar, Icon } from '@rneui/base';
 import TransItem from "../../components/TransItem";
+import { FlashList } from "@shopify/flash-list";
 
 const ClassScreen = ({ navigation }) => {
 
@@ -72,22 +73,24 @@ const ClassScreen = ({ navigation }) => {
             {
                 !isFilter ?
                     (
-                        <FlatList
+                        <FlashList
                             data={classList}
                             renderItem={({ item }) => (
                                 <TransItem onPress={() => { navigation.navigate("ClassDetail", { id: item.id }) }} isMoney={false} name={item.name} date={tutorData[item.tutor].name} />
                             )}
                             keyExtractor={(item) => item.id}
+                            estimatedItemSize={100}
                         />
                     )
                     :
                     (
-                        <FlatList
+                        <FlashList
                             data={filteredClassList}
                             renderItem={({ item }) => (
                                 <TransItem onPress={() => { navigation.navigate("ClassDetail", { id: item.id }) }} isMoney={false} name={item.name} date={tutorData[item.tutor].name} />
                             )}
                             keyExtractor={(item) => item.id}
+                            estimatedItemSize={100}
                         />
                     )
             }

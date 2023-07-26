@@ -17,7 +17,7 @@ const CustomButton = ({ text, onPress, styleText = {}, style = {} }) => {
 const styles = StyleSheet.create({
     button: {
         width: wp("85%"),
-        height: hp("7%"),
+        height: hp("8%"),
         backgroundColor: color.blue0,
         alignSelf: "center",
         borderRadius: 12,
