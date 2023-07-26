@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
         marginTop: hp("1%")
     },
     money: {
-        fontSize: wp("4.5%"),
+        fontSize: wp("4%"),
         color: color.black0,
         fontFamily: font.semibold,
     }

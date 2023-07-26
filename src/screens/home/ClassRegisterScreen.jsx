@@ -86,13 +86,11 @@ const ClassRegisterScreen = ({ navigation }) => {
 
                     <NavBar text="Back" onPress={() => { navigation.goBack() }} />
 
-                    <Image style={{ width: wp("80%"), height: wp("50%"), alignSelf: "center" }} source={require("../../assets/images/class.png")} />
+                    <Image style={{ width: wp("75%"), height: wp("50%"), alignSelf: "flex-start" }} source={require("../../assets/images/class.png")} />
 
                     {
                         isClass ? (
                             <View>
-                                <TextClick onPress={() => { setIsClass(false); }} text1="Want to register a tutor?" text2="Register" />
-
                                 <Text style={styles.title0}>Register a class</Text>
 
                                 <View style={styles.textBox}>
@@ -110,6 +108,7 @@ const ClassRegisterScreen = ({ navigation }) => {
 
                                 <Button text="Register class" onPress={registerClass} />
 
+                                <TextClick onPress={() => { setIsClass(false); }} text1="Want to register a tutor?" text2="Register" />
                             </View>
                         )
                             : (
@@ -149,8 +148,8 @@ const styles = StyleSheet.create({
     title0: {
         fontSize: wp("5%"),
         color: color.black0,
-        fontFamily: font.semibold,
-        marginTop: hp("4%"),
+        fontFamily: font.bold,
+        marginTop: hp("2%"),
         marginLeft: wp("7%")
     },
     textBox: {

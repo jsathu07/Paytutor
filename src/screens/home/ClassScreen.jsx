@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     title0: {
         fontSize: wp("5%"),
         color: color.black0,
-        fontFamily: font.semibold
+        fontFamily: font.bold
     },
     searchStyle: {
         backgroundColor: color.white0,

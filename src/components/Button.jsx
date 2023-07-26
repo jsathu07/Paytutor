@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
         alignItems: "center"
     },
     buttonText: {
-        fontFamily: font.bold,
+        fontFamily: font.semibold,
         fontSize: wp("4%"),
         color: color.white0
     },
