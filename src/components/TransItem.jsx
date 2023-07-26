@@ -29,7 +29,7 @@ const TransItem = ({ style = {}, name, value = "", date, isMoney, url = "", onPr
                 {
                     isMoney &&
                     (
-                        <Text style={styles.money}>{value} Rs</Text>
+                        <Text style={styles.money}>{value}</Text>
                     )
                 }
             </View>

@@ -51,7 +51,7 @@ const ClassRegisterScreen = ({ navigation }) => {
                 return;
             }
             setIsLoading(true);
-            await firestore().collection("User").doc(userData.uid).collection("Class").add({ name: name.trim(), fee: parseInt(fee), tutor: selectedTutor });
+            await firestore().collection("User").doc(userData.uid).collection("Class").add({ name: name.trim(), fee: parseInt(fee), tutor: selectedTutor, count: 0 });
             setSelectedTutor("");
             setName("");
             setFee("");
@@ -86,12 +86,12 @@ const ClassRegisterScreen = ({ navigation }) => {
 
                     <NavBar text="Back" onPress={() => { navigation.goBack() }} />
 
-                    <Image style={{ width: wp("75%"), height: wp("50%"), alignSelf: "flex-start" }} source={require("../../assets/images/class.png")} />
+                    <Image style={{ width: wp("75%"), height: wp("50%"), alignSelf: "flex-start" }} source={require("../../assets/images/learning.png")} />
 
                     {
                         isClass ? (
                             <View>
-                                <Text style={styles.title0}>Register a class</Text>
+                                <Text style={styles.title0}>Class registration</Text>
 
                                 <View style={styles.textBox}>
                                     <Text style={styles.text0}>Name</Text>
@@ -113,7 +113,7 @@ const ClassRegisterScreen = ({ navigation }) => {
                         )
                             : (
                                 <View>
-                                    <Text style={styles.title0}>Register a tutor</Text>
+                                    <Text style={styles.title0}>Tutor registration</Text>
 
                                     <View style={styles.textBox}>
                                         <Text style={styles.text0}>Name</Text>

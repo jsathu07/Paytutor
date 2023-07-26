@@ -45,6 +45,9 @@ const RegistrationScreen = ({ navigation }) => {
                 await firestore().collection("User").doc(userData.uid)
                     .collection("Class").doc(classId)
                     .collection("Student").doc(result.id).set({ enrolledDate: new Date().getTime(), id: result.id })
+                await firestore().collection("User").doc(userData.uid).collection("Class").doc(classId).update({
+                    count: firestore.FieldValue.increment(1)
+                })
             })
             setEnrolledClass([]);
             setPhone("");

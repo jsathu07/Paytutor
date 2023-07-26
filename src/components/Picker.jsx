@@ -15,7 +15,7 @@ const CustomPicker = ({ data, onChangeValue, max, placeholder, onClose, onOpen }
 
     return (
         <DropDownPicker
-            style={{ marginTop: hp("1%"), height: hp("8%"), width: wp("85%"), alignSelf: "center", borderRadius: 12, borderColor: color.grey1, borderWidth: 2 }}
+            style={{ marginTop: hp("1%"), height: hp("7%"), width: wp("85%"), alignSelf: "center", borderRadius: 12, borderColor: color.grey1, borderWidth: 2 }}
             open={open}
             value={value}
             max={max}
