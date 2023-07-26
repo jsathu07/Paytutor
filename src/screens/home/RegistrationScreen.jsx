@@ -39,12 +39,12 @@ const RegistrationScreen = ({ navigation }) => {
                 return;
             }
             setIsLoading(true);
-            const result = await firestore().collection("User").doc(userData.uid).collection("Student").add({ name: name.trim(), phone, last_payment: null })
+            const result = await firestore().collection("User").doc(userData.uid).collection("Student").add({ name: name.trim(), phone, last_payment: null, enrolledDate: new Date().getTime() })
             enrolledClass.forEach(async (classId) => {
-                await firestore().collection("User").doc(userData.uid).collection("Student").doc(result.id).collection("EnrolledClass").doc(classId).set({ enrolledDate: firestore.FieldValue.serverTimestamp(), id: result.id })
+                await firestore().collection("User").doc(userData.uid).collection("Student").doc(result.id).collection("EnrolledClass").doc(classId).set({ enrolledDate: new Date().getTime(), id: result.id })
                 await firestore().collection("User").doc(userData.uid)
                     .collection("Class").doc(classId)
-                    .collection("Student").doc(result.id).set({ enrolledDate: firestore.FieldValue.serverTimestamp(), id: result.id })
+                    .collection("Student").doc(result.id).set({ enrolledDate: new Date().getTime(), id: result.id })
             })
             setEnrolledClass([]);
             setPhone("");

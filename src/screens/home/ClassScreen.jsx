@@ -79,7 +79,7 @@ const ClassScreen = ({ navigation }) => {
                                 <TransItem onPress={() => { navigation.navigate("ClassDetail", { id: item.id }) }} isMoney={false} name={item.name} date={tutorData[item.tutor].name} />
                             )}
                             keyExtractor={(item) => item.id}
-                            estimatedItemSize={100}
+                            estimatedItemSize={hp("8%")}
                         />
                     )
                     :
@@ -90,7 +90,7 @@ const ClassScreen = ({ navigation }) => {
                                 <TransItem onPress={() => { navigation.navigate("ClassDetail", { id: item.id }) }} isMoney={false} name={item.name} date={tutorData[item.tutor].name} />
                             )}
                             keyExtractor={(item) => item.id}
-                            estimatedItemSize={100}
+                            estimatedItemSize={hp("8%")}
                         />
                     )
             }

@@ -3,7 +3,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import UserAvatar from 'react-native-user-avatar';
 import { color, font, scheme } from "../utils/theme";
 
-const TransItem = ({ style = {}, name, value = "", date, isMoney, url = "", onPress }) => {
+const TransItem = ({ style = {}, name, value = "", date, isMoney, url = "", onPress, text = "", text1 = null }) => {
     return (
         <TouchableOpacity onPress={onPress}>
             <View style={[styles.itemContainer, style]}>
@@ -12,6 +12,18 @@ const TransItem = ({ style = {}, name, value = "", date, isMoney, url = "", onPr
                     <View style={{ marginLeft: wp("5%") }}>
                         <Text style={styles.innerTitle}>{name}</Text>
                         <Text style={styles.innerTitleTwo}>{date}</Text>
+                        {
+                            text !== "" &&
+                            (
+                                <Text style={styles.innerTitleTwo}>{text}</Text>
+                            )
+                        }
+                        {
+                            text1 !== null &&
+                            (
+                                <Text style={styles.innerTitleTwo}>Last paid {new Date(text1).getFullYear()} / {new Date(text1).getMonth() + 1}</Text>
+                            )
+                        }
                     </View>
                 </View>
                 {

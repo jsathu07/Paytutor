@@ -46,7 +46,7 @@ const TransactionScreen = ({ navigation }) => {
                     data={data}
                     renderItem={({ item }) => <TransItem isMoney={true} name={item.name} value={item.value} date={new Date(item.date).toDateString()} />}
                     keyExtractor={(item) => item.id}
-                    estimatedItemSize={1000}
+                    estimatedItemSize={hp("10%")}
                     contentContainerStyle={{ paddingBottom: hp("10%") }}
                 />
 

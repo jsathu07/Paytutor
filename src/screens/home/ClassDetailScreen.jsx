@@ -34,20 +34,31 @@ const ClassDetailScreen = ({ navigation, route }) => {
         setFilteredUserList(result);
     }
 
+    const getStatus = (s) => {
+        let diff;
+        if (s !== null) {
+            let d = new Date(s);
+            let curr = new Date();
+            if (d.getFullYear() == curr.getFullYear()) {
+                diff = curr.getMonth() - d.getMonth();
+            } else {
+                diff = 11 - d.getMonth() + curr.getMonth() + 1 + (curr.getFullYear() - d.getFullYear() - 1) * 12;
+            }
+        } else {
+            diff = 1;
+        }
+        if (diff <= 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     const getData = async () => {
         const result = await firestore().collection("User").doc(userData.uid).collection("Class").doc(route.params.id).collection("Student").get();
         const temp = [];
         result.forEach((d) => {
-            let status = studentData[d.id].last_payment;
-            if (status !== null) {
-                if (new Date(status).getMonth() === new Date().getMonth()) {
-                    status = true;
-                } else {
-                    status = false;
-                }
-            } else {
-                status = false
-            }
+            let status = getStatus(studentData[d.id].last_payment);
             temp.push({
                 name: studentData[d.id].name,
                 status,
