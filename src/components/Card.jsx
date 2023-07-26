@@ -1,12 +1,11 @@
 import { useRef } from 'react';
-import { StyleSheet, View, Text, Image } from 'react-native';
+import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { color, font } from "../utils/theme";
-import { Avatar } from '@rneui/base';
+import { Avatar, Icon } from '@rneui/base';
 import QRCode from 'react-native-qrcode-svg';
 import ViewShot from "react-native-view-shot";
 import Share from 'react-native-share';
-import Button from './Button';
 
 const Card = ({ text1, text2, value, img }) => {
 
@@ -14,6 +13,10 @@ const Card = ({ text1, text2, value, img }) => {
 
     return (
         <View>
+            <TouchableOpacity onPress={() => { ref.current.capture().then(async (e) => { await Share.open({ message: `Payment card for ${text2}`, url: e }) }) }}>
+                <Icon style={{ alignSelf: "flex-end", marginRight: wp("5%") }} name="share-outline" type="ionicon" size={wp("7%")} />
+            </TouchableOpacity>
+
             <ViewShot ref={ref} options={{ fileName: value, format: "png", quality: 1 }}>
                 <View style={styles.container}>
                     <View style={{ marginTop: hp("5%"), backgroundColor: color.white1, padding: wp("6%"), borderRadius: 12, borderWidth: 0, borderStyle: "dashed" }}>
@@ -25,14 +28,13 @@ const Card = ({ text1, text2, value, img }) => {
                     </View>
                     <Text style={styles.innerTitle}>{text1}</Text>
                     <Text style={styles.innerTitleTwo}>{text2}</Text>
-                    <Image style={{ resizeMode: "center", width: wp("30%"), height: wp("20%"), alignSelf: "center", marginTop: hp("0%") }} source={require("../assets/images/smallLogoBlue.png")} />
+                    <View style={{ width: wp("90%"), backgroundColor: color.blue0, borderBottomLeftRadius: 12, borderBottomRightRadius: 12 }}>
+                        <Image style={{ width: wp("30%"), height: wp("12%"), alignSelf: "center" }} source={require("../../logo.png")} />
+                    </View>
                 </View>
             </ViewShot>
 
-            <Button style={{ marginTop: hp("6%") }} onPress={() => { ref.current.capture().then(async (e) => { await Share.open({ message: `Payment card for ${text2}`, url: e }) }) }} text="Share" />
-
-            <Button style={{ marginTop: hp("2%") }} text="Send" />
-
+            <View style={{ height: hp("3%") }}></View>
         </View>
     )
 }
@@ -51,7 +53,8 @@ const styles = StyleSheet.create({
         width: wp("90%"),
         backgroundColor: color.white0,
         borderRadius: 12,
-        alignSelf: "center"
+        alignSelf: "center",
+        marginTop: hp("2%")
     },
     innerTitle: {
         fontSize: wp("5%"),

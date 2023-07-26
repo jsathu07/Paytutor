@@ -22,7 +22,6 @@ const PaymentScreen = ({ navigation, route }) => {
     const [camera, setCamera] = useState(true);
     const [total, setTotal] = useState(0);
     const [enrolledClasses, setEnrolledClasses] = useState([]);
-    const [status, setStatus] = useState(false);
     const [student, setStudent] = useState({ name: "", phone: "" });
     const [isLoading, setIsLoading] = useState(false);
     const [months, setMonths] = useState(0);
@@ -48,16 +47,17 @@ const PaymentScreen = ({ navigation, route }) => {
         } else {
             diff = 1;
         }
+        if (diff <= 0) {
+            diff = 0;
+        }
         setMonths(diff);
         setCurrentMonths(diff);
-        if (diff <= 0) {
-            setStatus(true);
-        } else {
-            setStatus(false);
-        }
     }
 
     const payFee = async () => {
+        if (currentMonths <= 0) {
+            return;
+        }
         let transId = uuid.v4();
         setIsLoading(true);
         let final;
@@ -158,47 +158,33 @@ const PaymentScreen = ({ navigation, route }) => {
                             keyExtractor={(item) => item.id}
                             estimatedItemSize={hp("10%")}
                         />
-                        {
-                            !status &&
-                            (
-                                <View>
-                                    <Subject text1="Months un-paid" text2="" text3={months} />
-                                    <TouchableOpacity onPress={() => { setShowMonth(!showMonth) }}>
-                                        <Subject text1="Months paying" text2="" text3={currentMonths} />
-                                    </TouchableOpacity>
-                                    {
-                                        showMonth &&
-                                        (
-                                            <NumericInput onPlusPress={() => {
-                                                if (currentMonths + 1 <= months) {
-                                                    setCurrentMonths((m) => ++m)
-                                                }
-                                            }} onMinusPlus={() => {
-                                                if (currentMonths - 1 > 0) {
-                                                    setCurrentMonths((m) => --m)
-                                                }
-                                            }} value={currentMonths} />
-                                        )
-                                    }
-                                    <Subject text1="Total" isTotal={true} text2="" text3={`${total * currentMonths} Rs`} />
-                                </View>
-                            )
-                        }
+
+                        <View>
+                            <Subject text1="Months un-paid" text2="" text3={months} />
+                            <TouchableOpacity onPress={() => { setShowMonth(!showMonth) }}>
+                                <Subject text1="Months paying" text2="" text3={currentMonths} />
+                            </TouchableOpacity>
+                            {
+                                showMonth &&
+                                (
+                                    <NumericInput onPlusPress={() => {
+                                        setCurrentMonths((m) => ++m)
+                                    }} onMinusPlus={() => {
+                                        if (currentMonths - 1 > 0) {
+                                            setCurrentMonths((m) => --m)
+                                        }
+                                    }} value={currentMonths} />
+                                )
+                            }
+                            <Subject text1="Total" isTotal={true} text2="" text3={`${total * currentMonths} Rs`} />
+                        </View>
+
                     </View>
 
-                    {
-                        !status ?
-                            (
-                                <Button onPress={payFee} style={{ marginTop: hp("5%") }} text="Pay" />
-                            )
-                            :
-                            (
-                                null
-                            )
-                    }
+                    <Button onPress={payFee} style={{ marginTop: hp("5%") }} text="Pay" />
 
                     <ActionSheet headerAlwaysVisible={true} ref={actionSheetRef}>
-                        <Card img={userData.img} text1={student.name} text2={userData.name} />
+                        <Card value={id} img={userData.img} text1={student.name} text2={userData.name} />
                     </ActionSheet>
 
                     <View style={{ height: hp("10%") }}></View>

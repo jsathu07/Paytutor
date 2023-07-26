@@ -11,6 +11,7 @@ import DropDownHolder from '../../utils/Dropdown';
 import HomeScreen from './HomeScreen';
 import ClassScreen from './ClassScreen';
 import RegistrationScreen from './RegistrationScreen';
+import SettingsScreen from './SettingsScreen';
 import { getData } from '../../store/data';
 import { getStudent } from '../../store/student';
 import { getTransactions } from '../../store/trans';
@@ -75,7 +76,7 @@ const MainScreen = () => {
 
     useEffect(() => {
         fetchData();
-        checkUserEmail();
+        // checkUserEmail();
     }, [])
 
     return (
@@ -102,6 +103,8 @@ const MainScreen = () => {
                         iconName = "home-outline";
                     } else if (route.name === "Class") {
                         iconName = "list-outline"
+                    } else if (route.name === "Settings") {
+                        iconName = "settings-outline"
                     } else {
                         iconName = "person-add-outline"
                     }
@@ -112,6 +115,7 @@ const MainScreen = () => {
             <Tab.Screen name="Home" component={HomeScreen} />
             <Tab.Screen name="Class" component={ClassScreen} />
             <Tab.Screen name="Register" component={RegistrationScreen} />
+            <Tab.Screen name="Settings" component={SettingsScreen} />
         </Tab.Navigator>
     )
 

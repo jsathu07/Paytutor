@@ -91,7 +91,7 @@ const RegistrationScreen = ({ navigation }) => {
                             :
                             (
                                 <View>
-                                    <Image style={{ width: wp("50%"), height: wp("50%"), alignSelf: "center", marginTop: hp("2%") }} source={require("../../assets/images/post.png")} />
+                                    <Image style={{ width: wp("40%"), height: wp("40%"), alignSelf: "center", marginTop: hp("2%") }} source={require("../../assets/images/post.png")} />
 
                                     <Text style={styles.title0}>Student registration</Text>
 
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
         marginLeft: wp("7%")
     },
     textBox: {
-        marginTop: hp("4%"),
+        marginTop: hp("3%"),
         marginBottom: hp("5%"),
         alignSelf: "center"
     },

@@ -21,7 +21,7 @@ const TransItem = ({ style = {}, name, value = "", date, isMoney, url = "", onPr
                         {
                             text1 !== null &&
                             (
-                                <Text style={styles.innerTitleTwo}>Last paid {new Date(text1).getFullYear()} / {new Date(text1).getMonth() + 1}</Text>
+                                <Text style={styles.innerTitleTwo}>Last paid month {new Date(text1).getFullYear()} / {new Date(text1).getMonth() + 1}</Text>
                             )
                         }
                     </View>
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
         fontFamily: font.semibold,
     },
     innerTitleTwo: {
-        fontSize: wp("3%"),
+        fontSize: wp("3.5%"),
         color: color.grey0,
         fontFamily: font.semibold,
         marginTop: hp("1%")
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     money: {
         fontSize: wp("4.5%"),
         color: color.black0,
-        fontFamily: font.bold,
+        fontFamily: font.semibold,
     }
 })
 
