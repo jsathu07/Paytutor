@@ -1,43 +1,67 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { SafeAreaView, StyleSheet, View, Text, ScrollView, StatusBar, Linking } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 import Switch from '../../components/Switch';
 import SettingsItem from '../../components/SettingsItem';
 import { color, font } from '../../utils/theme';
 import Money from '../../components/Money';
+import { useSelector } from "react-redux";
+import Loader from '../../components/Loader';
 
 const SettingsScreen = () => {
 
-    const [checked, setChecked] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
+
+    const userData = useSelector((state) => state.user.data);
 
     const signOut = async () => {
         await auth().signOut();
     }
 
-    return (
-        <SafeAreaView style={styles.container}>
-            <ScrollView>
+    const setSmsStatus = async () => {
+        setIsLoading(true);
+        await firestore().collection("User").doc(userData.uid)
+            .update({
+                isSmsEnabled: !userData.isSmsEnabled
+            })
+        setIsLoading(false);
+    }
 
-                <Text style={styles.mainTitle}>Settings</Text>
+    useEffect(() => {
 
-                <Money text1={0} text2={0} text3={0} text4={"2022/07"} />
+    }, [userData])
 
-                <View style={{ marginTop: hp("1%") }}>
-                    <Switch text="Send SMS" text1="Messages for transactions" value={checked} onValueChange={() => { setChecked(!checked) }} />
+    if (isLoading) {
+        return (
+            <Loader />
+        )
+    } else {
+        return (
+            <SafeAreaView style={styles.container}>
+                <ScrollView>
 
-                    <SettingsItem name="card-outline" primary={color.black0} secondary={color.grey0} text="Pay balance" text1="Make remaining payment" onPress={() => { }} />
+                    <Text style={styles.mainTitle}>Settings</Text>
 
-                    <SettingsItem name="information-circle-outline" primary={color.black0} secondary={color.grey0} text="Contact support" text1="Press to contact customer support" onPress={() => { Linking.openURL("https://api.whatsapp.com/send?text=&phone=+94762206823") }} />
+                    <Money text1={userData?.msgCount} text2={userData?.msgCount} text3={0} text4={""} />
 
-                    <SettingsItem name="trash-bin-outline" primary={color.red1} secondary={color.red1} text="Sign Out" text1="Sign out from your account" onPress={signOut} />
-                </View>
+                    <View style={{ marginTop: hp("1%") }}>
+                        <Switch text="Send SMS" text1="Messages for transactions" value={userData.isSmsEnabled !== undefined ? userData.isSmsEnabled : false} onValueChange={setSmsStatus} />
 
-                <StatusBar backgroundColor={color.blue0} />
+                        <SettingsItem name="card-outline" primary={color.black0} secondary={color.grey0} text="Pay balance" text1="Make remaining payment" onPress={() => { }} />
 
-            </ScrollView>
-        </SafeAreaView>
-    )
+                        <SettingsItem name="information-circle-outline" primary={color.black0} secondary={color.grey0} text="Contact support" text1="Press to contact customer support" onPress={() => { Linking.openURL("https://api.whatsapp.com/send?text=&phone=+94762206823") }} />
+
+                        <SettingsItem name="trash-bin-outline" primary={color.red1} secondary={color.red1} text="Sign Out" text1="Sign out from your account" onPress={signOut} />
+                    </View>
+
+                    <StatusBar backgroundColor={color.blue0} />
+
+                </ScrollView>
+            </SafeAreaView>
+        )
+    }
 }
 
 const styles = StyleSheet.create({

@@ -14,7 +14,7 @@ import uuid from 'react-native-uuid';
 const CustomPaymentScreen = ({ navigation, route }) => {
 
     const [name, setName] = useState("");
-    const [fee, setFee] = useState(0);
+    const [fee, setFee] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [id, setId] = useState("");
 
@@ -34,7 +34,7 @@ const CustomPaymentScreen = ({ navigation, route }) => {
                 name: studentData[id].name,
                 id: transId,
                 studentId: id,
-                value: fee,
+                value: parseInt(fee),
                 type: "custom",
             }
             await firestore().collection("User").doc(userData.uid).collection("Student").doc(id).collection("Transaction").doc(transId).set(obj)

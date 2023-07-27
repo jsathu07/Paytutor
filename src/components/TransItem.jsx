@@ -17,7 +17,7 @@ const TransItem = ({ style = {}, name, value = "", date, isMoney, url = "", onPr
                             isUser &&
                             (
                                 <View style={{ flexDirection: "row", marginTop: hp("1%"), alignItems: "center" }}>
-                                    <Text style={styles.money}>{value !== undefined ? value : 0}  student(s)  </Text>
+                                    <Text style={styles.money}>{value !== undefined ? value : 0}  Student(s)  </Text>
                                     <Icon name="people-circle-outline" type="ionicon" size={wp("6%")} color={color.black0} />
                                 </View>
                             )
