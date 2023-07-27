@@ -76,7 +76,7 @@ const ClassScreen = ({ navigation }) => {
                         <FlashList
                             data={classList}
                             renderItem={({ item }) => (
-                                <TransItem onPress={() => { navigation.navigate("ClassDetail", { id: item.id }) }} isMoney={true} name={item.name} date={tutorData[item.tutor].name} />
+                                <TransItem onPress={() => { navigation.navigate("ClassDetail", { id: item.id }) }} isMoney={false} isUser={true} value={item.count} name={item.name} date={tutorData[item.tutor].name} />
                             )}
                             keyExtractor={(item) => item.id}
                             estimatedItemSize={hp("8%")}
@@ -87,7 +87,7 @@ const ClassScreen = ({ navigation }) => {
                         <FlashList
                             data={filteredClassList}
                             renderItem={({ item }) => (
-                                <TransItem onPress={() => { navigation.navigate("ClassDetail", { id: item.id }) }} isMoney={true} name={item.name} date={tutorData[item.tutor].name} />
+                                <TransItem onPress={() => { navigation.navigate("ClassDetail", { id: item.id }) }} isMoney={false} isUser={true} value={item.count} name={item.name} date={tutorData[item.tutor].name} />
                             )}
                             keyExtractor={(item) => item.id}
                             estimatedItemSize={hp("8%")}

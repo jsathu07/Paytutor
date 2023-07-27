@@ -1,9 +1,10 @@
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import UserAvatar from 'react-native-user-avatar';
+import { Icon } from '@rneui/base';
 import { color, font, scheme } from "../utils/theme";
 
-const TransItem = ({ style = {}, name, value = "", date, isMoney, url = "", onPress, text = "", text1 = null }) => {
+const TransItem = ({ style = {}, name, value = "", date, isMoney, url = "", onPress, text = "", text1 = null, isUser = false }) => {
     return (
         <TouchableOpacity onPress={onPress}>
             <View style={[styles.itemContainer, style]}>
@@ -12,6 +13,15 @@ const TransItem = ({ style = {}, name, value = "", date, isMoney, url = "", onPr
                     <View style={{ marginLeft: wp("5%") }}>
                         <Text style={styles.innerTitle}>{name}</Text>
                         <Text style={styles.innerTitleTwo}>{date}</Text>
+                        {
+                            isUser &&
+                            (
+                                <View style={{ flexDirection: "row", marginTop: hp("1%"), alignItems: "center" }}>
+                                    <Text style={styles.money}>{value !== undefined ? value : 0}  student(s)  </Text>
+                                    <Icon name="people-circle-outline" type="ionicon" size={wp("6%")} color={color.black0} />
+                                </View>
+                            )
+                        }
                         {
                             text !== "" &&
                             (

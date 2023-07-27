@@ -5,6 +5,7 @@ import auth from '@react-native-firebase/auth';
 import Switch from '../../components/Switch';
 import SettingsItem from '../../components/SettingsItem';
 import { color, font } from '../../utils/theme';
+import Money from '../../components/Money';
 
 const SettingsScreen = () => {
 
@@ -20,13 +21,17 @@ const SettingsScreen = () => {
 
                 <Text style={styles.mainTitle}>Settings</Text>
 
-                <Switch text="Send SMS" text1="Messages for transactions" value={checked} onValueChange={() => { setChecked(!checked) }} />
+                <Money text1={0} text2={0} text3={0} text4={"2022/07"} />
 
-                <SettingsItem name="card-outline" primary={color.black0} secondary={color.grey0} text="Pay balance" text1="Make remaining payment" onPress={() => { }} />
+                <View style={{ marginTop: hp("1%") }}>
+                    <Switch text="Send SMS" text1="Messages for transactions" value={checked} onValueChange={() => { setChecked(!checked) }} />
 
-                <SettingsItem name="information-circle-outline" primary={color.black0} secondary={color.grey0} text="Contact support" text1="Press to contact customer support" onPress={() => { Linking.openURL("https://api.whatsapp.com/send?text=&phone=+94762206823") }} />
+                    <SettingsItem name="card-outline" primary={color.black0} secondary={color.grey0} text="Pay balance" text1="Make remaining payment" onPress={() => { }} />
 
-                <SettingsItem name="trash-bin-outline" primary={color.red1} secondary={color.red1} text="Sign Out" text1="Sign out from your account" onPress={signOut} />
+                    <SettingsItem name="information-circle-outline" primary={color.black0} secondary={color.grey0} text="Contact support" text1="Press to contact customer support" onPress={() => { Linking.openURL("https://api.whatsapp.com/send?text=&phone=+94762206823") }} />
+
+                    <SettingsItem name="trash-bin-outline" primary={color.red1} secondary={color.red1} text="Sign Out" text1="Sign out from your account" onPress={signOut} />
+                </View>
 
                 <StatusBar backgroundColor={color.blue0} />
 
