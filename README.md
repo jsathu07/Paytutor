@@ -2,7 +2,6 @@
 The ultimate app for effortless payment management in your tuition class
 "Welcome to TuitionPay, the ultimate app for effortless payment management in your tuition class! With TuitionPay, students can easily pay their fees through a quick QR code scan. The app also offers SMS payment facility for added convenience. Stay informed with real-time access to all payment data, and enjoy seamless administration with multiple admin access. Simplify tuition fee payments with TuitionPay!"
 
-Long Description:
 "TuitionPay is a cutting-edge mobile application designed to streamline and revolutionize the payment management process for tuition classes. Created with both students and administrators in mind, TuitionPay offers a user-friendly and secure platform to facilitate seamless fee transactions.
 
 For students, the app provides a hassle-free payment experience through the use of QR codes. Upon receiving their fee invoices, students can simply open the app, scan the unique QR code associated with their account, and make quick payments without any delays. Additionally, TuitionPay offers an alternative payment method through SMS facility, ensuring that students can conveniently pay even without an internet connection.

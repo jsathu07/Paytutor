@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
         backgroundColor: color.white0
     },
     text: {
-        fontSize: wp("5%"),
+        fontSize: wp("4%"),
         color: color.black0,
         fontFamily: font.semibold,
     }

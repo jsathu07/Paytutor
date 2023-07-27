@@ -56,6 +56,33 @@ const PaymentScreen = ({ navigation, route }) => {
         setCurrentMonths(diff);
     }
 
+    const sendMessage = async (name, phone, amount) => {
+
+        if (userData.msgCount !== undefined && userData.msgCount > 1) {
+            return;
+        }
+
+        const message = `Hi ${name}, Your payment of Rs. ${amount} for ${userData.name}'s tutoring services has been made. Thanks! PayTutor Support Team`;
+        const url = `https://send.lk/sms/send.php?token=1336|tf0xhH3mh5K9tBOrdGA30gQcg1QvwlC7HMEpNYm6&to=${phone}&from=SendTest&message=${message}`;
+
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        }
+
+        try {
+            const response = await fetch(url, requestOptions);
+            if (response.ok) {
+                await firestore().collection("User").doc(userData.uid).update({ msgCount: firestore.FieldValue.increment(1) })
+            }
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
+
     const payFee = async () => {
         if (currentMonths <= 0) {
             return;
@@ -82,6 +109,7 @@ const PaymentScreen = ({ navigation, route }) => {
         }
         await firestore().collection("User").doc(userData.uid).collection("Student").doc(id).collection("Transaction").doc(transId).set(obj)
         await firestore().collection("User").doc(userData.uid).collection("Transaction").doc(transId).set(obj);
+        sendMessage(student.name, student.phone, total * currentMonths);
         getStatus(final);
         setIsLoading(false)
     }
