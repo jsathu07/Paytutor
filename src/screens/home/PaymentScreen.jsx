@@ -13,6 +13,8 @@ import ActionSheet from "react-native-actions-sheet";
 import { FlashList } from "@shopify/flash-list";
 import Card from '../../components/Card';
 import NumericInput from '../../components/NumericInput';
+import Printer from '../../components/Printer';
+import { Icon } from '@rneui/base';
 import uuid from 'react-native-uuid';
 
 const PaymentScreen = ({ navigation, route }) => {
@@ -145,7 +147,12 @@ const PaymentScreen = ({ navigation, route }) => {
 
                     <Image style={{ width: wp("50%"), height: wp("50%"), alignSelf: "center" }} source={require("../../assets/images/payment.png")} />
 
-                    <Text style={styles.title0}>Payment for class</Text>
+                    <View style={{ flexDirection: "row", justifyContent: "space-between", width: wp("90%"), marginTop: hp("2%"), alignSelf: "center" }}>
+                        <Text style={styles.title0}>Payment for class</Text>
+                        <TouchableOpacity onPress={() => { navigation.navigate("CustomPayment", { id }) }}>
+                            <Icon name="add-circle-outline" type="ionicon" size={wp("7%")} />
+                        </TouchableOpacity>
+                    </View>
 
                     <View style={{ marginTop: hp("2%") }}>
                         <TransItem onPress={() => { actionSheetRef.current.show() }} name={student.name} date={student.phone} isMoney={false} text={`Enrolled on ${new Date(student.enrolledDate).toDateString()}`} text1={studentData[id]?.last_payment} />
@@ -181,6 +188,8 @@ const PaymentScreen = ({ navigation, route }) => {
 
                     </View>
 
+                    <Printer />
+
                     <Button onPress={payFee} style={{ marginTop: hp("5%") }} text="Pay" />
 
                     <ActionSheet headerAlwaysVisible={true} ref={actionSheetRef}>
@@ -204,7 +213,6 @@ const styles = StyleSheet.create({
         fontSize: wp("5%"),
         color: color.black0,
         fontFamily: font.bold,
-        marginLeft: wp("7%")
     }
 });
 
