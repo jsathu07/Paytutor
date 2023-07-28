@@ -58,11 +58,11 @@ const PaymentScreen = ({ navigation, route }) => {
 
     const sendMessage = async (name, phone, amount) => {
 
-        if (userData.msgCount !== undefined && userData.msgCount > 1) {
+        if (!userData.isSmsEnabled || userData.msgCount > 1) {
             return;
         }
 
-        const message = `Hi ${name}, Your payment of Rs. ${amount} for ${userData.name}'s tutoring services has been made. Thanks! PayTutor Support Team`;
+        const message = `Hi ${name}, Your payment of Rs. ${amount} for ${userData.name}'s tutoring services has been made successfully. Thanks! PayTutor Support Team`;
         const url = `https://send.lk/sms/send.php?token=1336|tf0xhH3mh5K9tBOrdGA30gQcg1QvwlC7HMEpNYm6&to=${phone}&from=SendTest&message=${message}`;
 
         const requestOptions = {
@@ -78,7 +78,7 @@ const PaymentScreen = ({ navigation, route }) => {
                 await firestore().collection("User").doc(userData.uid).update({ msgCount: firestore.FieldValue.increment(1) })
             }
         } catch (error) {
-            console.log(error);
+
         }
 
     }
@@ -96,19 +96,22 @@ const PaymentScreen = ({ navigation, route }) => {
         } else {
             final = new Date();
         }
-        await firestore().collection("User").doc(userData.uid).collection("Student").doc(id)
-            .update({
-                last_payment: final.getTime()
-            })
+        const batch = firestore().batch();
+        const stdRef = firestore().collection("User").doc(userData.uid).collection("Student").doc(id)
+        batch.update(stdRef, { last_payment: final.getTime() })
         let obj = {
             date: new Date().getTime(),
             name: student.name,
             id: transId,
             studentId: id,
-            value: total * currentMonths
+            value: total * currentMonths,
+            type: "payment"
         }
-        await firestore().collection("User").doc(userData.uid).collection("Student").doc(id).collection("Transaction").doc(transId).set(obj)
-        await firestore().collection("User").doc(userData.uid).collection("Transaction").doc(transId).set(obj);
+        const stdTransRef = firestore().collection("User").doc(userData.uid).collection("Student").doc(id).collection("Transaction").doc(transId);
+        batch.set(stdTransRef, obj);
+        const transRef = firestore().collection("User").doc(userData.uid).collection("Transaction").doc(transId);
+        batch.set(transRef, obj);
+        await batch.commit();
         sendMessage(student.name, student.phone, total * currentMonths);
         getStatus(final);
         setIsLoading(false)
@@ -183,7 +186,7 @@ const PaymentScreen = ({ navigation, route }) => {
                     </View>
 
                     <View style={{ marginTop: hp("2%") }}>
-                        <TransItem onPress={() => { actionSheetRef.current.show() }} name={student.name} date={student.phone} isMoney={false} text={`Enrolled on ${new Date(student.enrolledDate).toDateString()}`} text1={studentData[id]?.last_payment} />
+                        <TransItem onPress={() => { actionSheetRef.current.show() }} name={student.name} date={student.phone} isMoney={false} text={`Enrolled on ${new Date(student.enrolledDate).toLocaleDateString()}`} text1={studentData[id].last_payment} />
                     </View>
 
                     <View style={{ marginTop: hp("2%"), padding: wp("4%"), width: wp("90%"), backgroundColor: color.white1, borderRadius: 12, alignSelf: "center" }}>
@@ -216,7 +219,7 @@ const PaymentScreen = ({ navigation, route }) => {
 
                     </View>
 
-                    <Printer />
+                    <Printer data={{ enrolledClasses, studentData, amount: total * currentMonths }} />
 
                     <Button onPress={payFee} style={{ marginTop: hp("5%") }} text="Pay" />
 

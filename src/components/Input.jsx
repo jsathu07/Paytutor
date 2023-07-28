@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { StyleSheet, View } from 'react-native';
 import { Input } from '@rneui/base';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
         borderBottomWidth: 2,
         borderColor: color.grey1,
         borderRadius: 12,
-        padding: wp("0.5%")
+        padding: wp("1.5%")
     },
     inputText: {
         fontFamily: font.semibold,

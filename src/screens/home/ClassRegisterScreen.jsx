@@ -10,6 +10,7 @@ import NavBar from "../../components/NavBar";
 import { color, font } from '../../utils/theme';
 import TextClick from "../../components/TextClick";
 import DropDownHolder from "../../utils/Dropdown";
+import Loader from "../../components/Loader";
 
 const ClassRegisterScreen = ({ navigation }) => {
 
@@ -33,8 +34,6 @@ const ClassRegisterScreen = ({ navigation }) => {
             }
             setIsLoading(true);
             await firestore().collection("User").doc(userData.uid).collection("Tutor").add({ name: tutorName.trim() });
-            const d = await getTutorList();
-            setTutorList(d);
             setTutorName("");
             setIsLoading(false);
             DropDownHolder.dropDown.alertWithType("success", "Success", "Tutor has been added successfully!");
@@ -51,7 +50,8 @@ const ClassRegisterScreen = ({ navigation }) => {
                 return;
             }
             setIsLoading(true);
-            await firestore().collection("User").doc(userData.uid).collection("Class").add({ name: name.trim(), fee: parseInt(fee), tutor: selectedTutor, count: 0 });
+            const result = await firestore().collection("User").doc(userData.uid).collection("Class").add({ name: name.trim(), fee: parseInt(fee), tutor: selectedTutor, count: 0 });
+            await firestore().collection("User").doc(userData.uid).collection("Tutor").doc(selectedTutor).collection("Class").doc(result.id).set({ enrolledDate: new Date().getTime() })
             setSelectedTutor("");
             setName("");
             setFee("");
@@ -63,11 +63,12 @@ const ClassRegisterScreen = ({ navigation }) => {
         }
     }
 
-    const getTutorList = async () => {
-        return new Promise((resolve, reject) => {
-            const temp = Object.values(tutorData).map((val) => { return { value: val.id, label: val.name } });
-            resolve(temp);
-        })
+    const getTutorList = () => {
+        setIsLoading(true);
+        const temp = Object.values(tutorData).map((val) => { return { value: val.id, label: val.name } });
+        setTutorList(temp);
+        setIsLoading(false);
+        setIsClass(true);
     }
 
     useEffect(() => {
@@ -75,9 +76,7 @@ const ClassRegisterScreen = ({ navigation }) => {
 
     if (isLoading) {
         return (
-            <SafeAreaView style={{ backgroundColor: color.white0, flex: 1, alignItems: "center", justifyContent: "center" }}>
-                <ActivityIndicator color={color.blue0} size="large" />
-            </SafeAreaView>
+            <Loader />
         )
     } else {
         return (
@@ -122,11 +121,7 @@ const ClassRegisterScreen = ({ navigation }) => {
 
                                     <Button text="Register tutor" onPress={registerTeacher} />
 
-                                    <TextClick onPress={async () => {
-                                        const d = await getTutorList();
-                                        setTutorList(d);
-                                        setIsClass(true);
-                                    }} text1="Want to register a class?" text2="Register" />
+                                    <TextClick onPress={getTutorList} text1="Want to register a class?" text2="Register" />
                                 </View>
 
                             )

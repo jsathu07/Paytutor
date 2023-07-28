@@ -31,7 +31,11 @@ const App = () => {
 
   const handleAuth = (user) => {
     if (user !== null) {
-      setUser(user);
+      // if (!user.emailVerified) {
+      //   DropDownHolder.dropDown.alertWithType("error", "Verify your email", "Please verify your email");
+      // } else {
+        setUser(user);
+      // }
     } else {
       setUser(null);
     }
@@ -60,7 +64,8 @@ const App = () => {
             ref={(ref) => DropDownHolder.setDropDown(ref)}
           />
         </View>
-      </Provider>)
+      </Provider>
+    )
   } else {
     return (
       <Provider store={store}>

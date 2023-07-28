@@ -10,6 +10,7 @@ import DropDownHolder from "../../utils/Dropdown";
 import { color, font } from '../../utils/theme';
 import Card from "../../components/Card";
 import NavBar from "../../components/NavBar";
+import Loader from "../../components/Loader";
 
 const RegistrationScreen = ({ navigation }) => {
 
@@ -21,8 +22,6 @@ const RegistrationScreen = ({ navigation }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [isScrollEnabled, setIsScrollEnabled] = useState(true);
     const [id, setId] = useState("");
-
-    const ref = useRef(null);
 
     const userData = useSelector((state) => state.user.data);
     const classData = useSelector((state) => state.data.data);
@@ -74,9 +73,7 @@ const RegistrationScreen = ({ navigation }) => {
 
     if (isLoading) {
         return (
-            <SafeAreaView style={{ backgroundColor: color.white0, flex: 1, alignItems: "center", justifyContent: "center" }}>
-                <ActivityIndicator color={color.blue0} size="large" />
-            </SafeAreaView>
+            <Loader />
         )
     } else {
         return (

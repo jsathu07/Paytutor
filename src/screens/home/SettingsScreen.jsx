@@ -44,10 +44,10 @@ const SettingsScreen = () => {
 
                     <Text style={styles.mainTitle}>Settings</Text>
 
-                    <Money text1={userData?.msgCount} text2={userData?.msgCount} text3={0} text4={""} />
+                    <Money text1={userData.msgCount} text2={userData.msgCount} text3={userData.subscriptionFee} text4={userData.lastPayment} />
 
                     <View style={{ marginTop: hp("1%") }}>
-                        <Switch text="Send SMS" text1="Messages for transactions" value={userData.isSmsEnabled !== undefined ? userData.isSmsEnabled : false} onValueChange={setSmsStatus} />
+                        <Switch text="Send SMS" text1="Messages for transactions" value={userData.isSmsEnabled} onValueChange={setSmsStatus} />
 
                         <SettingsItem name="card-outline" primary={color.black0} secondary={color.grey0} text="Pay balance" text1="Make remaining payment" onPress={() => { }} />
 

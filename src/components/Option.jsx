@@ -1,4 +1,3 @@
-import React from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { Icon } from '@rneui/base';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';

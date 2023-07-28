@@ -21,7 +21,7 @@ const HomeScreen = ({ navigation }) => {
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.topContainer}>
-                <Header img={userData !== undefined ? userData.img : ""} text={userData !== undefined ? userData.name : ""} />
+                <Header img={userData?.img} text={userData?.name} />
                 <Image style={{ width: wp("60%"), height: wp("20%") }} source={require("../../../logo.png")} />
             </View>
             <View style={styles.bottomContainer}>
@@ -35,7 +35,7 @@ const HomeScreen = ({ navigation }) => {
                 <View style={{ marginTop: hp("3%") }}>
                     <FlatList
                         data={transList}
-                        renderItem={({ item }) => <TransItem isMoney={true} name={item.name} value={`${item.value} Rs`} date={new Date(item.date).toDateString()} />}
+                        renderItem={({ item }) => <TransItem isMoney={true} name={item.name} value={`${item.value} Rs`} date={new Date(item.date).toLocaleDateString()} />}
                         keyExtractor={(item) => item.id}
                         contentContainerStyle={{ paddingBottom: hp("10%") }}
                     />

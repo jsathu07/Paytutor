@@ -1,4 +1,3 @@
-import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { Button } from '@rneui/base';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';

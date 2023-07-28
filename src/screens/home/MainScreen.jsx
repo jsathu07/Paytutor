@@ -6,7 +6,6 @@ import { color, font } from '../../utils/theme';
 import { useDispatch } from "react-redux";
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
-import DropDownHolder from '../../utils/Dropdown';
 
 import HomeScreen from './HomeScreen';
 import ClassScreen from './ClassScreen';
@@ -67,16 +66,8 @@ const MainScreen = () => {
             })
     }
 
-    const checkUserEmail = () => {
-        const user = auth().currentUser.emailVerified;
-        if (!user.emailVerified) {
-            DropDownHolder.dropDown.alertWithType("error", "Verify your email", "Please verify your email");
-        }
-    }
-
     useEffect(() => {
         fetchData();
-        // checkUserEmail();
     }, [])
 
     return (

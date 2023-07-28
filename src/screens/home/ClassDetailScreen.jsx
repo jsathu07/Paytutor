@@ -8,6 +8,7 @@ import { SearchBar } from '@rneui/base';
 import UserItem from "../../components/UserItem";
 import NavBar from "../../components/NavBar";
 import { FlashList } from "@shopify/flash-list";
+import Loader from "../../components/Loader";
 
 const ClassDetailScreen = ({ navigation, route }) => {
 
@@ -15,6 +16,7 @@ const ClassDetailScreen = ({ navigation, route }) => {
     const [filteredUserList, setFilteredUserList] = useState([]);
     const [isFilter, setIsFilter] = useState(false);
     const [text, setText] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
 
     const studentData = useSelector((state) => state.student.data);
     const userData = useSelector((state) => state.user.data);
@@ -55,6 +57,7 @@ const ClassDetailScreen = ({ navigation, route }) => {
     }
 
     const getData = async () => {
+        setIsLoading(true);
         const result = await firestore().collection("User").doc(userData.uid).collection("Class").doc(route.params.id).collection("Student").get();
         const temp = [];
         result.forEach((d) => {
@@ -66,60 +69,67 @@ const ClassDetailScreen = ({ navigation, route }) => {
             })
         })
         setUserList(temp);
+        setIsLoading(false);
     }
 
     useEffect(() => {
         getData();
     }, [route.params.id, studentData])
 
-    return (
-        <SafeAreaView style={{ backgroundColor: color.white0, flex: 1 }}>
+    if (isLoading) {
+        return (
+            <Loader />
+        )
+    } else {
+        return (
+            <SafeAreaView style={{ backgroundColor: color.white0, flex: 1 }}>
 
-            <NavBar text="Back" onPress={() => { navigation.goBack() }} />
+                <NavBar text="Back" onPress={() => { navigation.goBack() }} />
 
-            <SearchBar
-                placeholder="Type to search"
-                onChangeText={(searchText) => {
-                    setText(searchText);
-                    if (searchText) {
-                        searchFilter(searchText);
-                        setIsFilter(true);
-                    } else {
-                        setIsFilter(false);
-                    }
-                }}
-                value={text}
-                containerStyle={styles.searchStyle}
-                inputContainerStyle={styles.searchInside}
-                inputStyle={styles.searchInput}
-                placeholderTextColor={color.grey0}
-                selectionColor={color.black0}
-            />
+                <SearchBar
+                    placeholder="Type to search"
+                    onChangeText={(searchText) => {
+                        setText(searchText);
+                        if (searchText) {
+                            searchFilter(searchText);
+                            setIsFilter(true);
+                        } else {
+                            setIsFilter(false);
+                        }
+                    }}
+                    value={text}
+                    containerStyle={styles.searchStyle}
+                    inputContainerStyle={styles.searchInside}
+                    inputStyle={styles.searchInput}
+                    placeholderTextColor={color.grey0}
+                    selectionColor={color.black0}
+                />
 
-            {
-                !isFilter ?
-                    (
-                        <FlashList
-                            data={userList}
-                            renderItem={({ item }) => <UserItem onPress={() => { navigation.navigate("Payment", { mode: "Normal", id: item.id }) }} status={item.status} name={item.name} />}
-                            keyExtractor={(item) => item.id}
-                            estimatedItemSize={500}
-                        />
-                    )
-                    : (
-                        <FlashList
-                            data={filteredUserList}
-                            renderItem={({ item }) => <UserItem onPress={() => { navigation.navigate("Payment", { mode: "Normal", id: item.id }) }} status={item.status} name={item.name} />}
-                            keyExtractor={(item) => item.id}
-                            estimatedItemSize={500}
-                        />
-                    )
-            }
+                {
+                    !isFilter ?
+                        (
+                            <FlashList
+                                data={userList}
+                                renderItem={({ item }) => <UserItem onPress={() => { navigation.navigate("Payment", { mode: "Normal", id: item.id }) }} status={item.status} name={item.name} />}
+                                keyExtractor={(item) => item.id}
+                                estimatedItemSize={500}
+                            />
+                        )
+                        : (
+                            <FlashList
+                                data={filteredUserList}
+                                renderItem={({ item }) => <UserItem onPress={() => { navigation.navigate("Payment", { mode: "Normal", id: item.id }) }} status={item.status} name={item.name} />}
+                                keyExtractor={(item) => item.id}
+                                estimatedItemSize={500}
+                            />
+                        )
+                }
 
-            <View style={{ height: hp("2%") }}></View>
+                <View style={{ height: hp("2%") }}></View>
 
-        </SafeAreaView>
-    )
+            </SafeAreaView>
+        )
+    }
 }
 
 const styles = StyleSheet.create({

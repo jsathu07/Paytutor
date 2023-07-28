@@ -10,15 +10,18 @@ const Printer = ({ data }) => {
     const [status, setStatus] = useState(false);
 
     const onPrint = async () => {
-        // await BluetoothEscposPrinter.printerAlign(BluetoothEscposPrinter.ALIGN.CENTER);
-        // await BluetoothEscposPrinter.setBlob(0);
-        // await BluetoothEscposPrinter.printText("Hello World\n\r", {
-        //     encoding: 'GBK',
-        //     codepage: 0,
-        //     widthtimes: 3,
-        //     heigthtimes: 3,
-        //     fonttype: 1,
-        // })
+        if (status) {
+            // console.log(data.studentData, data.amount,data.enrolledClasses)
+            // await BluetoothEscposPrinter.printerAlign(BluetoothEscposPrinter.ALIGN.CENTER);
+            // await BluetoothEscposPrinter.setBlob(0);
+            // await BluetoothEscposPrinter.printText("Hello World\n\r", {
+            //     encoding: 'GBK',
+            //     codepage: 0,
+            //     widthtimes: 3,
+            //     heigthtimes: 3,
+            //     fonttype: 1,
+            // })
+        }
     }
 
     return (

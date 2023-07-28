@@ -3,7 +3,7 @@ import { Avatar } from '@rneui/base';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { color, font } from "../utils/theme"
 
-const Header = ({ text, img }) => {
+const Header = ({ text, img = null }) => {
     return (
         <View style={styles.mainContainer}>
             <Text style={styles.title0}>{text}</Text>
@@ -13,7 +13,7 @@ const Header = ({ text, img }) => {
                     size={wp("15%")}
                     containerStyle={styles.avatar}
                     source={{
-                        uri: img === "" ? 'https://media.istockphoto.com/id/512735004/photo/portrait-of-a-young-beautiful-woman.webp?b=1&s=170667a&w=0&k=20&c=ukfWAogvEFKXYdD6OmNBYyhMf2H3Gnb1qiQnH2fRe3I=' : img,
+                        uri: !img ? 'https://media.istockphoto.com/id/512735004/photo/portrait-of-a-young-beautiful-woman.webp?b=1&s=170667a&w=0&k=20&c=ukfWAogvEFKXYdD6OmNBYyhMf2H3Gnb1qiQnH2fRe3I=' : img,
                     }}
                 />
             </TouchableOpacity>

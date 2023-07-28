@@ -7,11 +7,13 @@ import Input from "../../components/Input";
 import TextClick from "../../components/TextClick";
 import DropDownHolder from "../../utils/Dropdown";
 import { color, font } from '../../utils/theme';
+import Loader from "../../components/Loader";
 
 const SignInScreen = ({ navigation }) => {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
 
     const SignIn = async () => {
         try {
@@ -19,41 +21,48 @@ const SignInScreen = ({ navigation }) => {
                 DropDownHolder.dropDown.alertWithType("error", "User details required", "Please enter your details!");
                 return;
             }
+            setIsLoading(true);
             await auth().signInWithEmailAndPassword(email, password);
+            setIsLoading(false);
         } catch (error) {
             DropDownHolder.dropDown.alertWithType("error", "Sign in failed", "Please try again after some time!");
         }
     }
 
-    return (
-        <SafeAreaView style={styles.container}>
-            <ScrollView>
+    if (isLoading) {
+        return (
+            <Loader />
+        )
+    } else {
+        return (
+            <SafeAreaView style={styles.container}>
+                <ScrollView>
 
-                <View style={{ backgroundColor: color.blue0, padding: wp("6%") }}>
-                    <Image style={{ width: wp("40%"), height: wp("15%"), alignSelf: "center" }} source={require("../../../logo.png")} />
-                </View>
-
-                <View style={{ height: hp("100%"), borderColor: color.white0, borderWidth: 1, borderTopRightRadius: 25, borderTopLeftRadius: 25, backgroundColor: color.white0 }}>
-                    <Text style={styles.title0}>Sign in to PayTutor</Text>
-
-                    <View style={styles.textBox}>
-                        <Text style={styles.text0}>Email</Text>
-                        <Input placeholder="Enter your email ..." keyboardType="email-address" type="email" onChangeText={(email) => { setEmail(email) }} value={email} />
-                        <Text style={styles.text0}>Your password</Text>
-                        <Input placeholder="Enter your password ..." type="password" onChangeText={(password) => { setPassword(password) }} value={password} />
+                    <View style={{ backgroundColor: color.blue0, padding: wp("6%") }}>
+                        <Image style={{ width: wp("40%"), height: wp("15%"), alignSelf: "center" }} source={require("../../../logo.png")} />
                     </View>
 
-                    <Button style={{ marginTop: hp("2%") }} onPress={SignIn} text="Sign In" />
+                    <View style={{ height: hp("100%"), borderColor: color.white0, borderWidth: 1, borderTopRightRadius: 25, borderTopLeftRadius: 25, backgroundColor: color.white0 }}>
+                        <Text style={styles.title0}>Sign in to PayTutor</Text>
 
-                    <TextClick onPress={() => { navigation.navigate("SignUp") }} text1="Don't have an account?" text2="Sign Up" />
+                        <View style={styles.textBox}>
+                            <Text style={styles.text0}>Email</Text>
+                            <Input placeholder="Enter your email ..." keyboardType="email-address" type="email" onChangeText={(email) => { setEmail(email) }} value={email} />
+                            <Text style={styles.text0}>Your password</Text>
+                            <Input placeholder="Enter your password ..." type="password" onChangeText={(password) => { setPassword(password) }} value={password} />
+                        </View>
 
-                </View>
+                        <Button style={{ marginTop: hp("2%") }} onPress={SignIn} text="Sign In" />
 
-                <StatusBar backgroundColor={color.blue0} />
-            </ScrollView>
-        </SafeAreaView>
-    )
+                        <TextClick onPress={() => { navigation.navigate("SignUp") }} text1="Don't have an account?" text2="Sign Up" />
 
+                    </View>
+
+                    <StatusBar backgroundColor={color.blue0} />
+                </ScrollView>
+            </SafeAreaView>
+        )
+    }
 }
 
 const styles = StyleSheet.create({
