@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { StyleSheet, View, SafeAreaView, FlatList } from "react-native";
+import { StyleSheet, View, SafeAreaView } from "react-native";
 import { color, font } from "../../utils/theme";
+import { MONTH } from "../../utils/constants";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { useSelector } from "react-redux";
 import firestore from '@react-native-firebase/firestore';
@@ -9,6 +10,7 @@ import UserItem from "../../components/UserItem";
 import NavBar from "../../components/NavBar";
 import { FlashList } from "@shopify/flash-list";
 import Loader from "../../components/Loader";
+import Picker from "../../components/Picker";
 
 const ClassDetailScreen = ({ navigation, route }) => {
 
@@ -17,6 +19,8 @@ const ClassDetailScreen = ({ navigation, route }) => {
     const [isFilter, setIsFilter] = useState(false);
     const [text, setText] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    const [currDate, setCurrDate] = useState(new Date());
+    const [month, setMonth] = useState(new Date().getMonth());
 
     const studentData = useSelector((state) => state.student.data);
     const userData = useSelector((state) => state.user.data);
@@ -40,7 +44,7 @@ const ClassDetailScreen = ({ navigation, route }) => {
         let diff;
         if (s !== null) {
             let d = new Date(s);
-            let curr = new Date();
+            let curr = currDate;
             if (d.getFullYear() == curr.getFullYear()) {
                 diff = curr.getMonth() - d.getMonth();
             } else {
@@ -54,6 +58,19 @@ const ClassDetailScreen = ({ navigation, route }) => {
         } else {
             return false;
         }
+    }
+
+    const updateStatus = (m) => {
+        setIsLoading(true);
+        let x = currDate;
+        x.setMonth(m);
+        setCurrDate(x);
+        const final = [];
+        userList.forEach((e) => {
+            final.push({ ...e, status: getStatus(studentData[e.id].last_payment) })
+        })
+        setUserList(final);
+        setIsLoading(false);
     }
 
     const getData = async () => {
@@ -105,6 +122,8 @@ const ClassDetailScreen = ({ navigation, route }) => {
                     selectionColor={color.black0}
                 />
 
+                <Picker direction="BOTTOM" customStyle={{ height: hp("1%"), width: wp("45%"), alignSelf: "flex-end", marginRight: wp("5%"), marginBottom: hp("7%") }} placeholder="Month" max={1} val={month} data={MONTH} onChangeValue={(m) => { updateStatus(m) }} />
+
                 {
                     !isFilter ?
                         (
@@ -144,7 +163,6 @@ const styles = StyleSheet.create({
         width: wp("95%"),
         alignSelf: "center",
         marginTop: hp("3%"),
-        marginBottom: hp("2%")
     },
     searchInside: {
         backgroundColor: color.grey1,

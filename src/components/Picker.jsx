@@ -3,7 +3,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import DropDownPicker from 'react-native-dropdown-picker';
 import { color, font } from '../utils/theme'
 
-const CustomPicker = ({ data, onChangeValue, max, placeholder, onClose, onOpen }) => {
+const CustomPicker = ({ direction="TOP", data, onChangeValue, max, placeholder, onClose = () => null, onOpen = () => null, customStyle = {} }) => {
 
     const [open, setOpen] = useState(false);
     const [items, setItems] = useState([]);
@@ -15,14 +15,14 @@ const CustomPicker = ({ data, onChangeValue, max, placeholder, onClose, onOpen }
 
     return (
         <DropDownPicker
-            style={{ marginTop: hp("1%"), height: hp("8%"), width: wp("85%"), alignSelf: "center", borderRadius: 12, borderColor: color.grey1, borderWidth: 2 }}
+            style={[{ height: hp("8%"), width: wp("85%"), marginTop: hp("1%"), borderRadius: 12, borderColor: color.grey1, borderWidth: 2, alignSelf: "center" }, customStyle]}
             open={open}
             value={value}
             max={max}
             placeholder={placeholder}
             placeholderStyle={{ color: color.grey0, fontFamily: font.semibold }}
             textStyle={{ color: color.black0, fontFamily: font.semibold }}
-            dropDownDirection="TOP"
+            dropDownDirection={direction}
             dropDownContainerStyle={{ borderColor: color.grey1, width: wp("85%"), alignSelf: "center", borderWidth: 2 }}
             showArrowIcon={true}
             showTickIcon={true}

@@ -12,6 +12,7 @@ import Option from "../../components/Option";
 import Loader from "../../components/Loader";
 import DropDownHolder from "../../utils/Dropdown";
 import { color, font } from '../../utils/theme';
+import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 
 const SignUpScreen = ({ navigation }) => {
 
@@ -24,11 +25,20 @@ const SignUpScreen = ({ navigation }) => {
     const [isLoading, setIsLoading] = useState(false);
 
     const openGallery = async () => {
-        try {
-            const result = await ImagePicker.openPicker({ cropping: true })
-            setSelectedImg(result.path)
-        } catch (error) {
-            // DropDownHolder.dropDown.alertWithType("error", "Gallery permission required", "Please allow to access your gallery");
+        if (Platform.OS === "ios") {
+            const permResult = await check(PERMISSIONS.IOS.PHOTO_LIBRARY)
+            if (permResult !== RESULTS.GRANTED) {
+                const r = await request(PERMISSIONS.IOS.PHOTO_LIBRARY);
+                if (r === RESULTS.GRANTED) {
+                    const result = await ImagePicker.openPicker({ cropping: true });
+                    setSelectedImg(result.path);
+                } else {
+                    DropDownHolder.dropDown.alertWithType("error", "Permission denied", "Please give access to gallery");
+                }
+            } else {
+                const result = await ImagePicker.openPicker({ cropping: true });
+                setSelectedImg(result.path)
+            }
         }
     }
 

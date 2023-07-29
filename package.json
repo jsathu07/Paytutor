@@ -47,6 +47,10 @@
     "react-native-view-shot": "^3.7.0",
     "react-redux": "^8.1.1"
   },
+  "reactNativePermissionsIOS": [
+    "Camera",
+    "PhotoLibrary"
+  ],
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@babel/preset-env": "^7.20.0",
