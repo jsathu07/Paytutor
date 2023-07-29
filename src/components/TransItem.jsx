@@ -14,15 +14,6 @@ const TransItem = ({ style = {}, name, value = "", date, isMoney, url = "", onPr
                         <Text style={styles.innerTitle}>{name}</Text>
                         <Text style={styles.innerTitleTwo}>{date}</Text>
                         {
-                            isUser &&
-                            (
-                                <View style={{ flexDirection: "row", marginTop: hp("1%"), alignItems: "center" }}>
-                                    <Icon name="people-circle-outline" type="ionicon" size={wp("6%")} color={color.black0} />
-                                    <Text style={styles.money}>  {value}  Student(s)  </Text>
-                                </View>
-                            )
-                        }
-                        {
                             text !== "" &&
                             (
                                 <Text style={styles.innerTitleTwo}>{text}</Text>
@@ -31,7 +22,7 @@ const TransItem = ({ style = {}, name, value = "", date, isMoney, url = "", onPr
                         {
                             text1 !== null &&
                             (
-                                <Text style={styles.innerTitleTwo}>Last paid month {new Date(text1).getFullYear()} / {new Date(text1).getMonth() + 1}</Text>
+                                <Text style={styles.innerTitleTwo}>Last paid {new Date(text1).getMonth() + 1} / {new Date(text1).getFullYear()}</Text>
                             )
                         }
                     </View>
@@ -40,6 +31,15 @@ const TransItem = ({ style = {}, name, value = "", date, isMoney, url = "", onPr
                     isMoney &&
                     (
                         <Text style={styles.money}>{value}</Text>
+                    )
+                }
+                {
+                    isUser &&
+                    (
+                        <View style={{ flexDirection: "row", marginTop: hp("1%"), alignItems: "center" }}>
+                            <Icon name="people-circle-outline" type="ionicon" size={wp("6%")} color={color.black0} />
+                            <Text style={styles.money}>  {value}  Student(s)  </Text>
+                        </View>
                     )
                 }
             </View>

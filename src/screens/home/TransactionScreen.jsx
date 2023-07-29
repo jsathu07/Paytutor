@@ -44,7 +44,7 @@ const TransactionScreen = ({ navigation }) => {
 
                 <FlashList
                     data={data}
-                    renderItem={({ item }) => <TransItem isMoney={true} name={item.name} value={`${item.value} Rs`} date={new Date(item.date).toLocaleDateString()} />}
+                    renderItem={({ item }) => <TransItem isMoney={true} name={item.name} value={`${item.value} Rs`} date={new Date(item.date).toLocaleDateString("en-GB")} />}
                     keyExtractor={(item) => item.id}
                     estimatedItemSize={hp("10%")}
                     contentContainerStyle={{ paddingBottom: hp("10%") }}

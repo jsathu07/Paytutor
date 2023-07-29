@@ -60,9 +60,9 @@ const SignUpScreen = ({ navigation }) => {
                 phone,
                 img: url,
                 isSmsEnabled: false,
-                msgCount: 0,
+                msgCount: 2,
                 lastPayment: null,
-                subscriptionFee: 0
+                transCount: 0
             }
             await firestore().collection("User").doc(authResult.user.uid).set(userData);
             setIsLoading(false);

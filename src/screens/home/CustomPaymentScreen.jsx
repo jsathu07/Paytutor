@@ -37,8 +37,14 @@ const CustomPaymentScreen = ({ navigation, route }) => {
                 value: parseInt(fee),
                 type: "custom",
             }
-            await firestore().collection("User").doc(userData.uid).collection("Student").doc(id).collection("Transaction").doc(transId).set(obj)
-            await firestore().collection("User").doc(userData.uid).collection("Transaction").doc(transId).set(obj);
+            const batch = firestore().batch();
+            const stdRef = firestore().collection("User").doc(userData.uid).collection("Student").doc(id).collection("Transaction").doc(transId);
+            batch.set(stdRef, obj);
+            const transRef = firestore().collection("User").doc(userData.uid).collection("Transaction").doc(transId);
+            batch.set(transRef, obj);
+            const userRef = firestore().collection("User").doc(userData.uid);
+            batch.update(userRef, { transCount: firestore.FieldValue.increment(1) })
+            await batch.commit();
             setName("");
             setFee("");
             setIsLoading(false);

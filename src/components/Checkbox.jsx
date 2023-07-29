@@ -24,9 +24,12 @@ const CustomCheckBox = ({ text, checked, onPress }) => {
 
 const styles = StyleSheet.create({
     checkboxContainer: {
-        padding: wp("2%"),
-        marginLeft: wp("7%"),
-        marginTop: hp("5%")
+        padding: wp("4%"),
+        paddingLeft: 0,
+        width: wp("85%"),
+        alignSelf: "center",
+        marginTop: hp("3%"),
+        marginBottom: hp("4%")
     },
     checkboxText: {
         fontFamily: font.bold,

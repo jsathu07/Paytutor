@@ -11,6 +11,7 @@ import { color, font } from '../../utils/theme';
 import Card from "../../components/Card";
 import NavBar from "../../components/NavBar";
 import Loader from "../../components/Loader";
+import CheckBox from "../../components/Checkbox";
 
 const RegistrationScreen = ({ navigation }) => {
 
@@ -21,6 +22,7 @@ const RegistrationScreen = ({ navigation }) => {
     const [showQR, setShowQR] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [isScrollEnabled, setIsScrollEnabled] = useState(true);
+    const [checked, setChecked] = useState(false);
     const [id, setId] = useState("");
 
     const userData = useSelector((state) => state.user.data);
@@ -38,12 +40,17 @@ const RegistrationScreen = ({ navigation }) => {
                 return;
             }
             setIsLoading(true);
-            const result = await firestore().collection("User").doc(userData.uid).collection("Student").add({ name: name.trim(), phone, last_payment: null, enrolledDate: new Date().getTime() })
+            const time = new Date();
+            if (checked) {
+                time.setMonth(time.getMonth() + 1);
+            }
+            const finalTime = time.getTime();
+            const result = await firestore().collection("User").doc(userData.uid).collection("Student").add({ name: name.trim(), phone, last_payment: null, enrolledDate: finalTime })
             enrolledClass.forEach(async (classId) => {
-                await firestore().collection("User").doc(userData.uid).collection("Student").doc(result.id).collection("EnrolledClass").doc(classId).set({ enrolledDate: new Date().getTime(), id: result.id })
+                await firestore().collection("User").doc(userData.uid).collection("Student").doc(result.id).collection("EnrolledClass").doc(classId).set({ enrolledDate: finalTime, id: result.id })
                 await firestore().collection("User").doc(userData.uid)
                     .collection("Class").doc(classId)
-                    .collection("Student").doc(result.id).set({ enrolledDate: new Date().getTime(), id: result.id })
+                    .collection("Student").doc(result.id).set({ enrolledDate: finalTime, id: result.id })
                 await firestore().collection("User").doc(userData.uid).collection("Class").doc(classId).update({
                     count: firestore.FieldValue.increment(1)
                 })
@@ -104,6 +111,8 @@ const RegistrationScreen = ({ navigation }) => {
                                         <Picker onOpen={() => { setIsScrollEnabled(false) }} onClose={() => { setIsScrollEnabled(true) }} placeholder="Select a class ..." val={enrolledClass} max={null} data={classList} onChangeValue={(enrolledClass) => { setEnrolledClass(enrolledClass) }} />
                                     </View>
 
+                                    <CheckBox checked={checked} text="Register for next month" onPress={() => { setChecked(!checked) }} />
+
                                     <Button text="Register" onPress={registerStudent} />
                                 </View>
                             )
@@ -130,7 +139,6 @@ const styles = StyleSheet.create({
     },
     textBox: {
         marginTop: hp("3%"),
-        marginBottom: hp("5%"),
         alignSelf: "center"
     },
     text0: {

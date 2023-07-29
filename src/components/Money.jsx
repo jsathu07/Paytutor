@@ -13,11 +13,11 @@ const Money = ({ text1, text2, text3, text4 }) => {
             <View style={{ width: wp("30%") }}>
                 <View>
                     <Text style={styles.innerTitle0}>{'\u2B24'}  SMS</Text>
-                    <Text style={styles.innerTitle1}>Rs. {text2}</Text>
+                    <Text style={styles.innerTitle1}>{text2}</Text>
                 </View>
                 <View style={{ marginTop: hp("2%") }}>
                     <Text style={[styles.innerTitle0, { color: color.orange0 }]}>{'\u2B24'}  Subscription</Text>
-                    <Text style={styles.innerTitle1}>Rs. {text3}</Text>
+                    <Text style={styles.innerTitle1}>{text3}</Text>
                 </View>
             </View>
         </View>

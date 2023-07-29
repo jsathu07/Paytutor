@@ -16,6 +16,7 @@ import NumericInput from '../../components/NumericInput';
 import Printer from '../../components/Printer';
 import { Icon } from '@rneui/base';
 import uuid from 'react-native-uuid';
+import DropDownHolder from '../../utils/Dropdown';
 
 const PaymentScreen = ({ navigation, route }) => {
 
@@ -36,19 +37,17 @@ const PaymentScreen = ({ navigation, route }) => {
     const userData = useSelector((state) => state.user.data);
     const tutorData = useSelector((state) => state.data.tutor);
 
-    const getStatus = (s) => {
+    const getStatus = (t, e) => {
         let diff;
-        if (s !== null) {
-            let d = new Date(s);
-            let curr = new Date();
-            if (d.getFullYear() == curr.getFullYear()) {
-                diff = curr.getMonth() - d.getMonth();
-            } else {
-                diff = 11 - d.getMonth() + curr.getMonth() + 1 + (curr.getFullYear() - d.getFullYear() - 1) * 12;
-            }
+        let d = new Date(t !== null ? t : e);
+        let curr = new Date();
+        if (d.getFullYear() == curr.getFullYear()) {
+            diff = curr.getMonth() - d.getMonth();
         } else {
-            diff = 1;
+            diff = 11 - d.getMonth() + curr.getMonth() + (curr.getFullYear() - d.getFullYear() - 1) * 12;
         }
+        if (t === null) diff++;
+
         if (diff <= 0) {
             diff = 0;
         }
@@ -58,7 +57,7 @@ const PaymentScreen = ({ navigation, route }) => {
 
     const sendMessage = async (name, phone, amount) => {
 
-        if (!userData.isSmsEnabled || userData.msgCount > 1) {
+        if (!userData.isSmsEnabled || userData.msgCount <= 0) {
             return;
         }
 
@@ -94,7 +93,8 @@ const PaymentScreen = ({ navigation, route }) => {
             final = new Date(studentData[id].last_payment);
             final.setMonth(final.getMonth() + currentMonths);
         } else {
-            final = new Date();
+            final = new Date(studentData[id].enrolledDate);
+            final.setMonth(final.getMonth() + currentMonths - 1);
         }
         const batch = firestore().batch();
         const stdRef = firestore().collection("User").doc(userData.uid).collection("Student").doc(id)
@@ -111,9 +111,11 @@ const PaymentScreen = ({ navigation, route }) => {
         batch.set(stdTransRef, obj);
         const transRef = firestore().collection("User").doc(userData.uid).collection("Transaction").doc(transId);
         batch.set(transRef, obj);
+        const userRef = firestore().collection("User").doc(userData.uid);
+        batch.update(userRef, { transCount: firestore.FieldValue.increment(1) });
         await batch.commit();
         sendMessage(student.name, student.phone, total * currentMonths);
-        getStatus(final);
+        getStatus(final, studentData[id].enrolledDate);
         setIsLoading(false)
     }
 
@@ -122,7 +124,7 @@ const PaymentScreen = ({ navigation, route }) => {
         setId(t);
         setCamera(false);
         setStudent({ name: studentData[t].name, phone: studentData[t].phone, enrolledDate: studentData[t].enrolledDate });
-        getStatus(studentData[t].last_payment);
+        getStatus(studentData[t].last_payment, studentData[t].enrolledDate);
         const result = await firestore().collection("User").doc(userData.uid).collection("Student").doc(t).collection("EnrolledClass").get();
         let total = 0, temp = [];
         result.forEach((d) => {
@@ -149,8 +151,14 @@ const PaymentScreen = ({ navigation, route }) => {
     }, [route])
 
     useEffect(() => {
+        if (userData?.isSmsEnabled && userData?.msgCount === 0) {
+            DropDownHolder.dropDown.alertWithType("error", "SMS will not be send", "Please reload your SMS balance!");
+        }
+    }, [userData])
 
-    }, [studentData, userData, tutorData, classData])
+    useEffect(() => {
+
+    }, [studentData, tutorData, classData])
 
     if (isLoading) {
         return (
@@ -186,7 +194,7 @@ const PaymentScreen = ({ navigation, route }) => {
                     </View>
 
                     <View style={{ marginTop: hp("2%") }}>
-                        <TransItem onPress={() => { actionSheetRef.current.show() }} name={student.name} date={student.phone} isMoney={false} text={`Enrolled on ${new Date(student.enrolledDate).toLocaleDateString()}`} text1={studentData[id].last_payment} />
+                        <TransItem onPress={() => { actionSheetRef.current.show() }} name={student.name} date={student.phone} isMoney={false} text={`Enrolled on ${new Date(student.enrolledDate).toLocaleDateString("en-GB")}`} text1={studentData[id].last_payment} />
                     </View>
 
                     <View style={{ marginTop: hp("2%"), padding: wp("4%"), width: wp("90%"), backgroundColor: color.white1, borderRadius: 12, alignSelf: "center" }}>
