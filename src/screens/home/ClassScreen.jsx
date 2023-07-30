@@ -128,7 +128,8 @@ const styles = StyleSheet.create({
     },
     searchInside: {
         backgroundColor: color.grey1,
-        borderRadius: 12
+        borderRadius: 12,
+        borderColor: color.white0
     },
     searchInput: {
         color: color.black0,
