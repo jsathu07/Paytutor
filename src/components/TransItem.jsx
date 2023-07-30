@@ -38,7 +38,7 @@ const TransItem = ({ style = {}, name, value = "", date, isMoney, url = "", onPr
                     (
                         <View style={{ flexDirection: "row", marginTop: hp("1%"), alignItems: "center" }}>
                             <Icon name="people-circle-outline" type="ionicon" size={wp("6%")} color={color.black0} />
-                            <Text style={styles.money}>  {value}  Student(s)  </Text>
+                            <Text style={styles.user}>  {value}  Student(s)  </Text>
                         </View>
                     )
                 }
@@ -65,13 +65,18 @@ const styles = StyleSheet.create({
         fontFamily: font.semibold,
     },
     innerTitleTwo: {
-        fontSize: wp("4%"),
+        fontSize: wp("3.5%"),
         color: color.grey0,
         fontFamily: font.semibold,
         marginTop: hp("1%")
     },
     money: {
         fontSize: wp("4%"),
+        color: color.black0,
+        fontFamily: font.semibold,
+    },
+    user: {
+        fontSize: wp("3.5%"),
         color: color.black0,
         fontFamily: font.semibold,
     }
