@@ -8,9 +8,9 @@ import Loader from '../../components/Loader';
 import { useSelector } from "react-redux";
 import TransItem from '../../components/TransItem';
 import { FlashList } from "@shopify/flash-list";
-import Picker from '../../components/Picker';
 import { MONTH } from '../../utils/constants';
 import TransMoney from '../../components/TransMoney';
+import PickerTwo from '../../components/PickerTwo';
 
 const TransactionScreen = ({ navigation }) => {
 
@@ -43,9 +43,9 @@ const TransactionScreen = ({ navigation }) => {
     const updateList = (m) => {
         setIsLoading(true);
         let t = 0, temp = [];
-        if (m[0] !== undefined) {
+        if (m !== undefined) {
             temp = initialData.filter((e) => {
-                if (new Date(e.date).getMonth() === m[0]) {
+                if (new Date(e.date).getMonth() === m) {
                     t += parseInt(e.value);
                     return true;
                 }
@@ -75,7 +75,7 @@ const TransactionScreen = ({ navigation }) => {
 
                 <View style={styles.titleContainer}>
                     <Text style={styles.title0}>Transactions</Text>
-                    <Picker direction="BOTTOM" customStyle={{ height: hp("1%"), width: wp("45%"), marginRight: wp("20%") }} placeholder="Filter by month" max={1} val={month} data={MONTH} onChangeValue={(m) => { updateList(m) }} />
+                    <PickerTwo customStyle={{ height: hp("5%"), width: wp("42%"), marginRight: wp("5%") }} placeholder="Filter by month" data={MONTH} onChangeValue={(m) => { updateList(m.value) }} />
                 </View>
 
                 <TransMoney text1={total} status={true} />

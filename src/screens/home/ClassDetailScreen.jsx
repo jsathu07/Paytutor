@@ -10,7 +10,7 @@ import UserItem from "../../components/UserItem";
 import NavBar from "../../components/NavBar";
 import { FlashList } from "@shopify/flash-list";
 import Loader from "../../components/Loader";
-import Picker from "../../components/Picker";
+import PickerTwo from "../../components/PickerTwo";
 
 const ClassDetailScreen = ({ navigation, route }) => {
 
@@ -41,35 +41,31 @@ const ClassDetailScreen = ({ navigation, route }) => {
         setFilteredUserList(result);
     }
 
-    const getStatus = (s) => {
+    const getStatus = (t, e) => {
         let diff;
-        if (s !== null) {
-            let d = new Date(s);
-            let curr = currDate;
-            if (d.getFullYear() == curr.getFullYear()) {
-                diff = curr.getMonth() - d.getMonth();
-            } else {
-                diff = 11 - d.getMonth() + curr.getMonth() + 1 + (curr.getFullYear() - d.getFullYear() - 1) * 12;
-            }
+        let d = new Date(t !== null ? t : e);
+        let curr = currDate;
+        if (d.getFullYear() == curr.getFullYear()) {
+            diff = curr.getMonth() - d.getMonth();
         } else {
-            diff = 1;
+            diff = 11 - d.getMonth() + curr.getMonth() + (curr.getFullYear() - d.getFullYear() - 1) * 12;
         }
+        if (t === null) diff++;
         if (diff <= 0) {
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
     const updateStatus = (m) => {
         setIsLoading(true);
         let final = [];
-        if (m[0] !== undefined) {
+        if (m !== undefined) {
             let x = currDate;
-            x.setMonth(m[0]);
+            x.setMonth(m);
             setCurrDate(x);
             userList.forEach((e) => {
-                final.push({ ...e, status: getStatus(studentData[e.id].last_payment) })
+                final.push({ ...e, status: getStatus(studentData[e.id].last_payment, studentData[e.id].enrolledDate) })
             })
         } else {
             final = initialList;
@@ -83,7 +79,7 @@ const ClassDetailScreen = ({ navigation, route }) => {
         const result = await firestore().collection("User").doc(userData.uid).collection("Class").doc(route.params.id).collection("Student").get();
         const temp = [];
         result.forEach((d) => {
-            let status = getStatus(studentData[d.id].last_payment);
+            let status = getStatus(studentData[d.id].last_payment, studentData[d.id].enrolledDate);
             temp.push({
                 name: studentData[d.id].name,
                 status,
@@ -128,7 +124,7 @@ const ClassDetailScreen = ({ navigation, route }) => {
                     selectionColor={color.black0}
                 />
 
-                <Picker direction="BOTTOM" customStyle={{ height: hp("1%"), width: wp("45%"), alignSelf: "flex-end", marginRight: wp("5%"), marginBottom: hp("7%") }} placeholder="Filter by month" max={1} val={month} data={MONTH} onChangeValue={(m) => { updateStatus(m) }} />
+                <PickerTwo customStyle={{ height: hp("5%"), width: wp("35%"), alignSelf: "flex-end", marginRight: wp("5%"), marginBottom: hp("2%") }} placeholder="Month" data={MONTH} onChangeValue={(m) => { updateStatus(m.value) }} />
 
                 {
                     !isFilter ?
