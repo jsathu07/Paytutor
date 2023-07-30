@@ -25,6 +25,7 @@ const SignInScreen = ({ navigation }) => {
             await auth().signInWithEmailAndPassword(email, password);
             setIsLoading(false);
         } catch (error) {
+            setIsLoading(false);
             DropDownHolder.dropDown.alertWithType("error", "Sign in failed", "Please try again after some time!");
         }
     }

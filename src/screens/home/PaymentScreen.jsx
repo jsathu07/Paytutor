@@ -74,7 +74,7 @@ const PaymentScreen = ({ navigation, route }) => {
         try {
             const response = await fetch(url, requestOptions);
             if (response.ok) {
-                await firestore().collection("User").doc(userData.uid).update({ msgCount: firestore.FieldValue.increment(1) })
+                await firestore().collection("User").doc(userData.uid).update({ msgCount: firestore.FieldValue.increment(-1) })
             }
         } catch (error) {
 

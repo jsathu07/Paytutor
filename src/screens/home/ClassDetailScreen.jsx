@@ -15,6 +15,7 @@ import Picker from "../../components/Picker";
 const ClassDetailScreen = ({ navigation, route }) => {
 
     const [userList, setUserList] = useState([]);
+    const [initialList, setInitialList] = useState([]);
     const [filteredUserList, setFilteredUserList] = useState([]);
     const [isFilter, setIsFilter] = useState(false);
     const [text, setText] = useState("");
@@ -62,13 +63,17 @@ const ClassDetailScreen = ({ navigation, route }) => {
 
     const updateStatus = (m) => {
         setIsLoading(true);
-        let x = currDate;
-        x.setMonth(m);
-        setCurrDate(x);
-        const final = [];
-        userList.forEach((e) => {
-            final.push({ ...e, status: getStatus(studentData[e.id].last_payment) })
-        })
+        let final = [];
+        if (m[0] !== undefined) {
+            let x = currDate;
+            x.setMonth(m[0]);
+            setCurrDate(x);
+            userList.forEach((e) => {
+                final.push({ ...e, status: getStatus(studentData[e.id].last_payment) })
+            })
+        } else {
+            final = initialList;
+        }
         setUserList(final);
         setIsLoading(false);
     }
@@ -86,6 +91,7 @@ const ClassDetailScreen = ({ navigation, route }) => {
             })
         })
         setUserList(temp);
+        setInitialList(temp);
         setIsLoading(false);
     }
 
@@ -122,7 +128,7 @@ const ClassDetailScreen = ({ navigation, route }) => {
                     selectionColor={color.black0}
                 />
 
-                <Picker direction="BOTTOM" customStyle={{ height: hp("1%"), width: wp("45%"), alignSelf: "flex-end", marginRight: wp("5%"), marginBottom: hp("7%") }} placeholder="Month" max={1} val={month} data={MONTH} onChangeValue={(m) => { updateStatus(m) }} />
+                <Picker direction="BOTTOM" customStyle={{ height: hp("1%"), width: wp("45%"), alignSelf: "flex-end", marginRight: wp("5%"), marginBottom: hp("7%") }} placeholder="Filter by month" max={1} val={month} data={MONTH} onChangeValue={(m) => { updateStatus(m) }} />
 
                 {
                     !isFilter ?
