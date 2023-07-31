@@ -13,6 +13,7 @@ import Loader from "../../components/Loader";
 import DropDownHolder from "../../utils/Dropdown";
 import { color, font } from '../../utils/theme';
 import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
+import TextClick from "../../components/TextClick";
 
 const SignUpScreen = ({ navigation }) => {
 
@@ -39,6 +40,9 @@ const SignUpScreen = ({ navigation }) => {
                 const result = await ImagePicker.openPicker({ cropping: true });
                 setSelectedImg(result.path)
             }
+        } else {
+            const result = await ImagePicker.openPicker({ cropping: true });
+            setSelectedImg(result.path)
         }
     }
 
@@ -123,6 +127,8 @@ const SignUpScreen = ({ navigation }) => {
                         <CheckBox checked={checked} text="Accept terms and conditions" onPress={() => { setChecked(!checked) }} />
 
                         <Button style={{ marginTop: hp("5%") }} onPress={SignUp} text="Sign Up" />
+
+                        <TextClick onPress={() => { navigation.navigate("SignIn") }} text1="Already have an account?" text2="Sign In" />
 
                         <View style={{ height: hp("10%") }}></View>
                     </View>

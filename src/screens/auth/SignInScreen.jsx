@@ -14,6 +14,7 @@ const SignInScreen = ({ navigation }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    const [isCreateAdmin, setIsCreateAdmin] = useState(false);
 
     const SignIn = async () => {
         try {
@@ -27,6 +28,22 @@ const SignInScreen = ({ navigation }) => {
         } catch (error) {
             setIsLoading(false);
             DropDownHolder.dropDown.alertWithType("error", "Sign in failed", "Please try again after some time!");
+        }
+    }
+
+    const createAdmin = async () => {
+        try {
+            if (email === "" || password === "") {
+                DropDownHolder.dropDown.alertWithType("error", "User details required", "Please enter your details!");
+                return;
+            }
+            setIsLoading(true);
+            await auth().createUserWithEmailAndPassword(email, password);
+            //update that this is a admin acc in cloud
+            setIsLoading(false);
+        } catch (error) {
+            setIsLoading(false);
+            DropDownHolder.dropDown.alertWithType("error", "Account creation failed", "Please try again after some time!");
         }
     }
 
@@ -54,6 +71,8 @@ const SignInScreen = ({ navigation }) => {
                         </View>
 
                         <Button style={{ marginTop: hp("2%") }} onPress={SignIn} text="Sign In" />
+                        <Button style={{ marginTop: hp("2%") }} onPress={createAdmin} text="Create admin" />
+
 
                         <TextClick onPress={() => { navigation.navigate("SignUp") }} text1="Don't have an account?" text2="Sign Up" />
 

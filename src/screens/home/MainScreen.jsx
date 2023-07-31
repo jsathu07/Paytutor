@@ -33,7 +33,7 @@ const MainScreen = () => {
             .onSnapshot((val) => {
                 temp2 = {};
                 val.forEach((d) => {
-                    temp2[d.id] = { id: d.id, name: d.data().name }
+                    temp2[d.id] = { id: d.id, ...d.data() }
                 })
                 dispatch(getData({ type: "tutor", data: temp2 }));
             })

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { SafeAreaView, StyleSheet, View, Text, StatusBar, FlatList } from 'react-native';
+import { SafeAreaView, StyleSheet, View, Text, StatusBar, TouchableOpacity } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import firestore from '@react-native-firebase/firestore';
 import { color, font } from '../../utils/theme';
@@ -8,9 +8,10 @@ import Loader from '../../components/Loader';
 import { useSelector } from "react-redux";
 import TransItem from '../../components/TransItem';
 import { FlashList } from "@shopify/flash-list";
-import { MONTH } from '../../utils/constants';
 import TransMoney from '../../components/TransMoney';
-import PickerTwo from '../../components/PickerTwo';
+import DatePicker from '../../components/DatePicker';
+import { Icon } from '@rneui/base';
+import Button from '../../components/Button';
 
 const TransactionScreen = ({ navigation }) => {
 
@@ -18,10 +19,10 @@ const TransactionScreen = ({ navigation }) => {
 
     const [isLoading, setIsLoading] = useState(false);
     const [data, setData] = useState([]);
-    const [initialData, setInitialData] = useState([]);
-    const [initialValue, setInitialValue] = useState(0);
     const [total, setTotal] = useState(0);
-    const [month, setMonth] = useState(new Date().getMonth());
+    const [showFilter, setShowFilter] = useState(false);
+    const [initialDate, setInitialDate] = useState(new Date());
+    const [finalDate, setFinalDate] = useState(new Date());
 
     const getData = async () => {
         setIsLoading(true);
@@ -34,29 +35,31 @@ const TransactionScreen = ({ navigation }) => {
             temp.push(da);
         })
         setData(temp);
-        setInitialData(temp);
         setTotal(t);
-        setInitialValue(t);
+        setShowFilter(false);
         setIsLoading(false);
     }
 
-    const updateList = (m) => {
+    const updateList = async () => {
         setIsLoading(true);
-        let t = 0, temp = [];
-        if (m !== undefined) {
-            temp = initialData.filter((e) => {
-                if (new Date(e.date).getMonth() === m) {
-                    t += parseInt(e.value);
-                    return true;
-                }
-                return false;
-            })
-        } else {
-            temp = initialData;
-            t = initialValue;
+        const result = await firestore().collection("User").doc(userData.uid).collection("Transaction").where("date", ">=", initialDate.getTime()).where("date", "<=", finalDate.getTime()).orderBy("date", "desc").get();
+        if (result.size === 0) {
+            setData([]);
+            setTotal(0);
+            setIsLoading(false);
+            setShowFilter(false);
+            return;
         }
-        setTotal(t);
+        const temp = [];
+        let t = 0;
+        result.forEach((d) => {
+            let da = d.data();
+            t += parseInt(da.value);
+            temp.push(da);
+        });
         setData(temp);
+        setTotal(t);
+        setShowFilter(false);
         setIsLoading(false);
     }
 
@@ -75,20 +78,49 @@ const TransactionScreen = ({ navigation }) => {
 
                 <View style={styles.titleContainer}>
                     <Text style={styles.title0}>Transactions</Text>
-                    <PickerTwo customStyle={{ height: hp("5%"), width: wp("42%"), marginRight: wp("5%") }} placeholder="Filter by month" data={MONTH} onChangeValue={(m) => { updateList(m.value) }} />
+                    <TouchableOpacity onPress={() => { setShowFilter(!showFilter) }}>
+                        <Icon name="filter-circle-outline" type="ionicon" size={wp("8%")} style={{ marginRight: wp("5%") }} />
+                    </TouchableOpacity>
                 </View>
 
-                <TransMoney text1={total} status={true} />
+                {
+                    !showFilter &&
+                    (
+                        <View style={{ flex: 1 }}>
+                            <TransMoney text1={total} status={true} />
 
-                <View style={{ marginTop: hp("2%"), flex: 1 }}>
-                    <FlashList
-                        data={data}
-                        renderItem={({ item }) => <TransItem isMoney={true} name={item.name} value={`${item.value} Rs`} date={new Date(item.date).toLocaleDateString("en-GB")} />}
-                        keyExtractor={(item) => item.id}
-                        estimatedItemSize={hp("10%")}
-                        contentContainerStyle={{ paddingBottom: hp("10%") }}
-                    />
-                </View>
+                            <View style={{ marginTop: hp("2%"), flex: 1 }}>
+                                <FlashList
+                                    data={data}
+                                    renderItem={({ item }) => <TransItem isMoney={true} name={item.name} value={`${item.value} Rs`} date={new Date(item.date).toLocaleDateString("en-GB")} />}
+                                    keyExtractor={(item) => item.id}
+                                    estimatedItemSize={hp("10%")}
+                                    contentContainerStyle={{ paddingBottom: hp("10%") }}
+                                />
+                            </View>
+                        </View>
+                    )
+                }
+
+                {
+                    showFilter &&
+                    (
+                        <View style={styles.filterContainer}>
+                            <Text style={styles.filterText}>Date</Text>
+                            <View style={styles.filterDateContainer}>
+                                <DatePicker type="initial" value={initialDate} onConfirm={(date) => { setInitialDate(date) }} />
+                                <Text style={styles.reset}>-</Text>
+                                <DatePicker type="final" value={finalDate} onConfirm={(date) => { setFinalDate(date) }} />
+                            </View>
+                            <View style={styles.filterInnerContainer}>
+                                <TouchableOpacity onPress={getData}>
+                                    <Text style={styles.reset}>Reset all filters</Text>
+                                </TouchableOpacity>
+                                <Button style={{ marginTop: hp("0%"), width: wp("35%"), height: hp("6%") }} onPress={updateList} text="Apply Filters" />
+                            </View>
+                        </View>
+                    )
+                }
 
                 <StatusBar backgroundColor={color.blue0} />
             </SafeAreaView>
@@ -113,6 +145,33 @@ const styles = StyleSheet.create({
         alignItems: "center",
         marginTop: hp("4%"),
         marginBottom: hp("2%"),
+    },
+    filterContainer: {
+        alignSelf: "center",
+        width: wp("90%"),
+    },
+    filterText: {
+        fontSize: wp("4%"),
+        color: color.black0,
+        fontFamily: font.semibold,
+        marginTop: hp("2%"),
+    },
+    filterInnerContainer: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+        marginTop: hp("4%"),
+    },
+    filterDateContainer: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginTop: hp("2%")
+    },
+    reset: {
+        fontSize: wp("4%"),
+        color: color.grey0,
+        fontFamily: font.semibold,
     }
 });
 

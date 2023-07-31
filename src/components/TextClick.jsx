@@ -5,7 +5,7 @@ import { color, font } from "../utils/theme"
 const TextClick = ({ text1, text2, onPress }) => {
     return (
         <TouchableOpacity onPress={onPress}>
-            <View style={{ flexDirection: "row", justifyContent: "space-around", marginTop: hp("4%"), width: wp("80%"), alignSelf: "center" }}>
+            <View style={{ flexDirection: "row", justifyContent: "space-around", marginTop: hp("4%"), width: wp("70%"), alignSelf: "center" }}>
                 <Text style={styles.lastTextOne}>{text1}</Text>
                 <Text style={styles.lastTextTwo}>{text2}</Text>
             </View>
@@ -23,7 +23,6 @@ const styles = StyleSheet.create({
         fontFamily: font.semibold,
         fontSize: wp("4%"),
         color: color.blue0,
-        marginLeft: wp("4%")
     }
 })
 

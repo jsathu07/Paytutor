@@ -44,7 +44,7 @@ const SettingsScreen = () => {
 
                     <Text style={styles.mainTitle}>Settings</Text>
 
-                    <Money text1={0} text2={userData.msgCount} text3={userData.transCount} text4={userData.lastPayment} />
+                    <Money text1={userData.transCount * 10} text2={userData.msgCount} text3={userData.transCount} text4={userData.lastPayment} />
 
                     <View style={{ marginTop: hp("1%") }}>
                         <Switch text="Send SMS" text1="Messages for transactions" value={userData.isSmsEnabled} onValueChange={setSmsStatus} />
@@ -57,6 +57,8 @@ const SettingsScreen = () => {
 
                         <SettingsItem name="trash-bin-outline" primary={color.red1} secondary={color.red1} text="Sign Out" text1="Sign out from your account" onPress={signOut} />
                     </View>
+
+                    <View style={{ height: hp("5%") }}></View>
 
                     <StatusBar backgroundColor={color.blue0} />
 

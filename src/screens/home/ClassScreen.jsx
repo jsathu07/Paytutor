@@ -3,10 +3,11 @@ import { StyleSheet, View, SafeAreaView, Text, TouchableOpacity, FlatList, Statu
 import { color, font } from "../../utils/theme";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { useSelector } from "react-redux";
-import { SearchBar, Icon } from '@rneui/base';
+import {  Icon } from '@rneui/base';
 import TransItem from "../../components/TransItem";
 import { FlashList } from "@shopify/flash-list";
 import Loader from "../../components/Loader";
+import SearchBar from "../../components/SearchBar";
 
 const ClassScreen = ({ navigation }) => {
 
@@ -41,6 +42,16 @@ const ClassScreen = ({ navigation }) => {
         setFilteredClassList(result);
     }
 
+    const onSearch = (searchText) => {
+        setText(searchText);
+        if (searchText) {
+            searchFilter(searchText);
+            setIsFilter(true);
+        } else {
+            setIsFilter(false);
+        }
+    }
+
     useEffect(() => {
         getClassList();
     }, [classData, tutorData])
@@ -60,24 +71,7 @@ const ClassScreen = ({ navigation }) => {
                     </TouchableOpacity>
                 </View>
 
-                <SearchBar
-                    placeholder="Type to search"
-                    onChangeText={(searchText) => {
-                        setText(searchText);
-                        if (searchText) {
-                            searchFilter(searchText);
-                            setIsFilter(true);
-                        } else {
-                            setIsFilter(false);
-                        }
-                    }}
-                    value={text}
-                    containerStyle={styles.searchStyle}
-                    inputContainerStyle={styles.searchInside}
-                    inputStyle={styles.searchInput}
-                    placeholderTextColor={color.grey0}
-                    selectionColor={color.black0}
-                />
+                <SearchBar value={text} onChangeText={onSearch} />
 
                 {
                     !isFilter ?
@@ -117,24 +111,6 @@ const styles = StyleSheet.create({
         fontSize: wp("5%"),
         color: color.black0,
         fontFamily: font.bold
-    },
-    searchStyle: {
-        backgroundColor: color.white0,
-        borderColor: color.white0,
-        width: wp("95%"),
-        alignSelf: "center",
-        marginTop: hp("3%"),
-        marginBottom: hp("2%")
-    },
-    searchInside: {
-        backgroundColor: color.grey1,
-        borderRadius: 12,
-        borderColor: color.white0
-    },
-    searchInput: {
-        color: color.black0,
-        fontFamily: font.semibold,
-        fontSize: wp("4%")
     },
 })
 

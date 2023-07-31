@@ -86,37 +86,42 @@ const PaymentScreen = ({ navigation, route }) => {
         if (currentMonths <= 0) {
             return;
         }
-        let transId = uuid.v4();
-        setIsLoading(true);
-        let final;
-        if (studentData[id].last_payment !== null) {
-            final = new Date(studentData[id].last_payment);
-            final.setMonth(final.getMonth() + currentMonths);
-        } else {
-            final = new Date(studentData[id].enrolledDate);
-            final.setMonth(final.getMonth() + currentMonths - 1);
+        try {
+            let transId = uuid.v4();
+            setIsLoading(true);
+            let final;
+            if (studentData[id].last_payment !== null) {
+                final = new Date(studentData[id].last_payment);
+                final.setMonth(final.getMonth() + currentMonths);
+            } else {
+                final = new Date(studentData[id].enrolledDate);
+                final.setMonth(final.getMonth() + currentMonths - 1);
+            }
+            const batch = firestore().batch();
+            const stdRef = firestore().collection("User").doc(userData.uid).collection("Student").doc(id)
+            batch.update(stdRef, { last_payment: final.getTime() })
+            let obj = {
+                date: new Date().getTime(),
+                name: student.name,
+                id: transId,
+                studentId: id,
+                value: total * currentMonths,
+                type: "payment"
+            }
+            const stdTransRef = firestore().collection("User").doc(userData.uid).collection("Student").doc(id).collection("Transaction").doc(transId);
+            batch.set(stdTransRef, obj);
+            const transRef = firestore().collection("User").doc(userData.uid).collection("Transaction").doc(transId);
+            batch.set(transRef, obj);
+            const userRef = firestore().collection("User").doc(userData.uid);
+            batch.update(userRef, { transCount: firestore.FieldValue.increment(1) });
+            await batch.commit();
+            sendMessage(student.name, student.phone, total * currentMonths);
+            getStatus(final, studentData[id].enrolledDate);
+            setIsLoading(false);
+            DropDownHolder.dropDown.alertWithType("success", "Success", "Payment has been made successfully!");
+        } catch (error) {
+
         }
-        const batch = firestore().batch();
-        const stdRef = firestore().collection("User").doc(userData.uid).collection("Student").doc(id)
-        batch.update(stdRef, { last_payment: final.getTime() })
-        let obj = {
-            date: new Date().getTime(),
-            name: student.name,
-            id: transId,
-            studentId: id,
-            value: total * currentMonths,
-            type: "payment"
-        }
-        const stdTransRef = firestore().collection("User").doc(userData.uid).collection("Student").doc(id).collection("Transaction").doc(transId);
-        batch.set(stdTransRef, obj);
-        const transRef = firestore().collection("User").doc(userData.uid).collection("Transaction").doc(transId);
-        batch.set(transRef, obj);
-        const userRef = firestore().collection("User").doc(userData.uid);
-        batch.update(userRef, { transCount: firestore.FieldValue.increment(1) });
-        await batch.commit();
-        sendMessage(student.name, student.phone, total * currentMonths);
-        getStatus(final, studentData[id].enrolledDate);
-        setIsLoading(false)
     }
 
     const getData = async (t) => {

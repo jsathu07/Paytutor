@@ -5,12 +5,12 @@ import { MONTH } from "../../utils/constants";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { useSelector } from "react-redux";
 import firestore from '@react-native-firebase/firestore';
-import { SearchBar } from '@rneui/base';
 import UserItem from "../../components/UserItem";
 import NavBar from "../../components/NavBar";
 import { FlashList } from "@shopify/flash-list";
 import Loader from "../../components/Loader";
 import PickerTwo from "../../components/PickerTwo";
+import SearchBar from "../../components/SearchBar";
 
 const ClassDetailScreen = ({ navigation, route }) => {
 
@@ -91,6 +91,16 @@ const ClassDetailScreen = ({ navigation, route }) => {
         setIsLoading(false);
     }
 
+    const onSearch = (searchText) => {
+        setText(searchText);
+        if (searchText) {
+            searchFilter(searchText);
+            setIsFilter(true);
+        } else {
+            setIsFilter(false);
+        }
+    }
+
     useEffect(() => {
         getData();
     }, [route.params.id, studentData])
@@ -105,24 +115,7 @@ const ClassDetailScreen = ({ navigation, route }) => {
 
                 <NavBar text="Back" onPress={() => { navigation.goBack() }} />
 
-                <SearchBar
-                    placeholder="Type to search"
-                    onChangeText={(searchText) => {
-                        setText(searchText);
-                        if (searchText) {
-                            searchFilter(searchText);
-                            setIsFilter(true);
-                        } else {
-                            setIsFilter(false);
-                        }
-                    }}
-                    value={text}
-                    containerStyle={styles.searchStyle}
-                    inputContainerStyle={styles.searchInside}
-                    inputStyle={styles.searchInput}
-                    placeholderTextColor={color.grey0}
-                    selectionColor={color.black0}
-                />
+                <SearchBar onChangeText={onSearch} value={text} />
 
                 <PickerTwo customStyle={{ height: hp("5%"), width: wp("35%"), alignSelf: "flex-end", marginRight: wp("5%"), marginBottom: hp("2%") }} placeholder="Month" data={MONTH} onChangeValue={(m) => { updateStatus(m.value) }} />
 
@@ -154,27 +147,7 @@ const ClassDetailScreen = ({ navigation, route }) => {
 }
 
 const styles = StyleSheet.create({
-    title0: {
-        fontSize: wp("5%"),
-        color: color.black0,
-        fontFamily: font.semibold
-    },
-    searchStyle: {
-        backgroundColor: color.white0,
-        borderColor: color.white0,
-        width: wp("95%"),
-        alignSelf: "center",
-        marginTop: hp("3%"),
-    },
-    searchInside: {
-        backgroundColor: color.grey1,
-        borderRadius: 12
-    },
-    searchInput: {
-        color: color.black0,
-        fontFamily: font.semibold,
-        fontSize: wp("4%")
-    },
+
 })
 
 export default ClassDetailScreen;
