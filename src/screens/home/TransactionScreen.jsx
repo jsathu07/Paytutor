@@ -79,7 +79,7 @@ const TransactionScreen = ({ navigation }) => {
                 <View style={styles.titleContainer}>
                     <Text style={styles.title0}>Transactions</Text>
                     <TouchableOpacity onPress={() => { setShowFilter(!showFilter) }}>
-                        <Icon name="filter-circle-outline" type="ionicon" size={wp("8%")} style={{ marginRight: wp("5%") }} />
+                        <Icon name="filter-circle-outline" type="ionicon" size={wp("7%")} style={{ marginRight: wp("5%") }} />
                     </TouchableOpacity>
                 </View>
 

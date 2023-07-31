@@ -4,6 +4,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import { useSelector } from "react-redux";
 import { CameraScreen } from 'react-native-camera-kit';
 import firestore from '@react-native-firebase/firestore';
+import functions from '@react-native-firebase/functions';
 import Button from "../../components/Button";
 import { color, font } from '../../utils/theme';
 import Subject from '../../components/Subject';
@@ -55,33 +56,6 @@ const PaymentScreen = ({ navigation, route }) => {
         setCurrentMonths(diff);
     }
 
-    const sendMessage = async (name, phone, amount) => {
-
-        if (!userData.isSmsEnabled || userData.msgCount <= 0) {
-            return;
-        }
-
-        const message = `Hi ${name}, Your payment of Rs. ${amount} for ${userData.name}'s tutoring services has been made successfully. Thanks! PayTutor Support Team`;
-        const url = `https://send.lk/sms/send.php?token=1336|tf0xhH3mh5K9tBOrdGA30gQcg1QvwlC7HMEpNYm6&to=${phone}&from=SendTest&message=${message}`;
-
-        const requestOptions = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        }
-
-        try {
-            const response = await fetch(url, requestOptions);
-            if (response.ok) {
-                await firestore().collection("User").doc(userData.uid).update({ msgCount: firestore.FieldValue.increment(-1) })
-            }
-        } catch (error) {
-
-        }
-
-    }
-
     const payFee = async () => {
         if (currentMonths <= 0) {
             return;
@@ -115,12 +89,13 @@ const PaymentScreen = ({ navigation, route }) => {
             const userRef = firestore().collection("User").doc(userData.uid);
             batch.update(userRef, { transCount: firestore.FieldValue.increment(1) });
             await batch.commit();
-            sendMessage(student.name, student.phone, total * currentMonths);
+            const result = await functions().httpsCallable('sendMessage')({ student, amount: total * currentMonths, userData });
+            console.log(result);
             getStatus(final, studentData[id].enrolledDate);
             setIsLoading(false);
             DropDownHolder.dropDown.alertWithType("success", "Success", "Payment has been made successfully!");
         } catch (error) {
-
+            DropDownHolder.dropDown.alertWithType("error", "Error occurred", "Error occurred while processing!");
         }
     }
 

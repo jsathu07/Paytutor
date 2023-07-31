@@ -1,19 +1,34 @@
-/**
- * Import function triggers from their respective submodules:
- *
- * const {onCall} = require("firebase-functions/v2/https");
- * const {onDocumentWritten} = require("firebase-functions/v2/firestore");
- *
- * See a full list of supported triggers at https://firebase.google.com/docs/functions
- */
+const functions = require('firebase-functions/v1');
 
-const {onRequest} = require("firebase-functions/v2/https");
-const logger = require("firebase-functions/logger");
+const admin = require("firebase-admin");
+admin.initializeApp();
 
-// Create and deploy your first functions
-// https://firebase.google.com/docs/functions/get-started
+exports.sendMessage = functions.https.onCall(async (data, context) => {
+    const userData = data.userData;
 
-// exports.helloWorld = onRequest((request, response) => {
-//   logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
+    if (!userData.isSmsEnabled || userData.msgCount <= 0) {
+        return { result: "failed" };
+    }
+
+    const message = `Hi ${data.student.name}, Your payment of Rs. ${data.amount} for ${userData.name}'s tutoring services has been made successfully. Thanks! PayTutor Support Team`;
+    const url = `https://send.lk/sms/send.php?token=1336|tf0xhH3mh5K9tBOrdGA30gQcg1QvwlC7HMEpNYm6&to=${data.student.phone}&from=SendTest&message=${message}`;
+
+    const requestOptions = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    }
+
+    try {
+        const response = await fetch(url, requestOptions);
+        if (response.ok) {
+            await firestore().collection("User").doc(userData.uid).update({ msgCount: firestore.FieldValue.increment(-1) });
+            return { result: "success" };
+        }
+        return { result: "failed" };
+    } catch (error) {
+        return { result: "failed" };
+    }
+});
+

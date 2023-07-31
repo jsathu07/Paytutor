@@ -71,8 +71,6 @@ const SignInScreen = ({ navigation }) => {
                         </View>
 
                         <Button style={{ marginTop: hp("2%") }} onPress={SignIn} text="Sign In" />
-                        <Button style={{ marginTop: hp("2%") }} onPress={createAdmin} text="Create admin" />
-
 
                         <TextClick onPress={() => { navigation.navigate("SignUp") }} text1="Don't have an account?" text2="Sign Up" />
 
