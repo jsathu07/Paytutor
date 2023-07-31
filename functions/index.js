@@ -6,10 +6,6 @@ admin.initializeApp();
 exports.sendMessage = functions.https.onCall(async (data, context) => {
     const userData = data.userData;
 
-    if (!userData.isSmsEnabled || userData.msgCount <= 0) {
-        return { result: "failed" };
-    }
-
     const message = `Hi ${data.student.name}, Your payment of Rs. ${data.amount} for ${userData.name}'s tutoring services has been made successfully. Thanks! PayTutor Support Team`;
     const url = `https://send.lk/sms/send.php?token=1336|tf0xhH3mh5K9tBOrdGA30gQcg1QvwlC7HMEpNYm6&to=${data.student.phone}&from=SendTest&message=${message}`;
 
@@ -23,7 +19,7 @@ exports.sendMessage = functions.https.onCall(async (data, context) => {
     try {
         const response = await fetch(url, requestOptions);
         if (response.ok) {
-            await firestore().collection("User").doc(userData.uid).update({ msgCount: firestore.FieldValue.increment(-1) });
+            await admin.firestore().collection("User").doc(userData.uid).update({ msgCount: admin.firestore.FieldValue.increment(-1) });
             return { result: "success" };
         }
         return { result: "failed" };
@@ -31,4 +27,3 @@ exports.sendMessage = functions.https.onCall(async (data, context) => {
         return { result: "failed" };
     }
 });
-

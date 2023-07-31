@@ -89,8 +89,9 @@ const PaymentScreen = ({ navigation, route }) => {
             const userRef = firestore().collection("User").doc(userData.uid);
             batch.update(userRef, { transCount: firestore.FieldValue.increment(1) });
             await batch.commit();
-            const result = await functions().httpsCallable('sendMessage')({ student, amount: total * currentMonths, userData });
-            console.log(result);
+            if (userData.isSmsEnabled && userData.msgCount > 0) {
+                await functions().httpsCallable('sendMessage')({ student, amount: total * currentMonths, userData });
+            }
             getStatus(final, studentData[id].enrolledDate);
             setIsLoading(false);
             DropDownHolder.dropDown.alertWithType("success", "Success", "Payment has been made successfully!");

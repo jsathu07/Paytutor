@@ -31,11 +31,11 @@ const App = () => {
 
   const handleAuth = (user) => {
     if (user !== null) {
-      if (!user.emailVerified) {
-        DropDownHolder.dropDown.alertWithType("error", "Verify your email", "Please verify your email");
-      } else {
+      // if (!user.emailVerified) {
+      //   DropDownHolder.dropDown.alertWithType("error", "Verify your email", "Please verify your email");
+      // } else {
         setUser(user);
-      }
+      // }
     } else {
       setUser(null);
     }
