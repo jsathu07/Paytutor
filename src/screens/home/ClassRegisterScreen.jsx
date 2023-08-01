@@ -33,7 +33,7 @@ const ClassRegisterScreen = ({ navigation }) => {
                 return;
             }
             setIsLoading(true);
-            await firestore().collection("User").doc(userData.uid).collection("Tutor").add({ name: tutorName.trim() });
+            await firestore().collection("User").doc(userData.uid).collection("Tutor").add({ name: tutorName.trim(), enrolledDate: new Date().getTime() });
             setTutorName("");
             setIsLoading(false);
             DropDownHolder.dropDown.alertWithType("success", "Success", "Tutor has been added successfully!");
@@ -50,8 +50,11 @@ const ClassRegisterScreen = ({ navigation }) => {
                 return;
             }
             setIsLoading(true);
-            const result = await firestore().collection("User").doc(userData.uid).collection("Class").add({ name: name.trim(), fee: parseInt(fee), tutor: selectedTutor, count: 0 });
-            await firestore().collection("User").doc(userData.uid).collection("Tutor").doc(selectedTutor).collection("Class").doc(result.id).set({ enrolledDate: new Date().getTime() })
+            const result = await firestore().collection("User").doc(userData.uid).collection("Class").add({ name: name.trim(), fee: parseInt(fee), tutorId: selectedTutor, count: 0, createdDate: new Date().getTime() });
+            await firestore().collection("User").doc(userData.uid).collection("Tutor").doc(selectedTutor)
+                .update({
+                    enrolledClass: firestore.FieldValue.arrayUnion(result.id)
+                })
             setSelectedTutor("");
             setName("");
             setFee("");

@@ -47,7 +47,7 @@ const MainScreen = () => {
                 dispatch(getData({ type: "classData", data: temp }));
             })
         let trans = [];
-        firestore().collection("User").doc(uid).collection("Transaction").orderBy("date", "desc").limit(5)
+        firestore().collection("User").doc(uid).collection("Transaction").orderBy("createdDate", "desc").limit(5)
             .onSnapshot((val) => {
                 trans = [];
                 val.forEach((d) => {

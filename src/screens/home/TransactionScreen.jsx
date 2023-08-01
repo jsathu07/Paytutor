@@ -16,6 +16,7 @@ import Button from '../../components/Button';
 const TransactionScreen = ({ navigation }) => {
 
     const userData = useSelector((state) => state.user.data);
+    const studentData = useSelector((state) => state.student.data);
 
     const [isLoading, setIsLoading] = useState(false);
     const [data, setData] = useState([]);
@@ -26,7 +27,7 @@ const TransactionScreen = ({ navigation }) => {
 
     const getData = async () => {
         setIsLoading(true);
-        const result = await firestore().collection("User").doc(userData.uid).collection("Transaction").orderBy("date", "desc").get();
+        const result = await firestore().collection("User").doc(userData.uid).collection("Transaction").orderBy("createdDate", "desc").get();
         const temp = [];
         let t = 0;
         result.forEach((d) => {
@@ -42,7 +43,9 @@ const TransactionScreen = ({ navigation }) => {
 
     const updateList = async () => {
         setIsLoading(true);
-        const result = await firestore().collection("User").doc(userData.uid).collection("Transaction").where("date", ">=", initialDate.getTime()).where("date", "<=", finalDate.getTime()).orderBy("date", "desc").get();
+        initialDate.setHours(0); initialDate.setMinutes(0); initialDate.setSeconds(0); initialDate.setMilliseconds(0);
+        finalDate.setHours(23); finalDate.setMinutes(59); finalDate.setSeconds(59); finalDate.setMilliseconds(999);
+        const result = await firestore().collection("User").doc(userData.uid).collection("Transaction").where("createdDate", ">=", initialDate.getTime()).where("createdDate", "<=", finalDate.getTime()).orderBy("createdDate", "desc").get();
         if (result.size === 0) {
             setData([]);
             setTotal(0);
@@ -65,7 +68,7 @@ const TransactionScreen = ({ navigation }) => {
 
     useEffect(() => {
         getData();
-    }, [userData])
+    }, [userData, studentData])
 
     if (isLoading) {
         return (
@@ -92,7 +95,7 @@ const TransactionScreen = ({ navigation }) => {
                             <View style={{ marginTop: hp("2%"), flex: 1 }}>
                                 <FlashList
                                     data={data}
-                                    renderItem={({ item }) => <TransItem isMoney={true} name={item.name} value={`${item.value} Rs`} date={new Date(item.date).toLocaleDateString("en-GB")} />}
+                                    renderItem={({ item }) => <TransItem isMoney={true} name={studentData[item.studentId].name} value={`${item.value} Rs`} date={new Date(item.createdDate).toLocaleDateString("en-GB")} />}
                                     keyExtractor={(item) => item.id}
                                     estimatedItemSize={hp("10%")}
                                     contentContainerStyle={{ paddingBottom: hp("10%") }}
@@ -108,9 +111,9 @@ const TransactionScreen = ({ navigation }) => {
                         <View style={styles.filterContainer}>
                             <Text style={styles.filterText}>Date</Text>
                             <View style={styles.filterDateContainer}>
-                                <DatePicker type="initial" value={initialDate} onConfirm={(date) => { setInitialDate(date) }} />
+                                <DatePicker value={initialDate} onConfirm={(date) => { setInitialDate(date) }} />
                                 <Text style={styles.reset}>-</Text>
-                                <DatePicker type="final" value={finalDate} onConfirm={(date) => { setFinalDate(date) }} />
+                                <DatePicker value={finalDate} onConfirm={(date) => { setFinalDate(date) }} />
                             </View>
                             <View style={styles.filterInnerContainer}>
                                 <TouchableOpacity onPress={getData}>

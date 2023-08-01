@@ -64,8 +64,8 @@ const PaymentScreen = ({ navigation, route }) => {
             let transId = uuid.v4();
             setIsLoading(true);
             let final;
-            if (studentData[id].last_payment !== null) {
-                final = new Date(studentData[id].last_payment);
+            if (studentData[id].lastPayment !== null) {
+                final = new Date(studentData[id].lastPayment);
                 final.setMonth(final.getMonth() + currentMonths);
             } else {
                 final = new Date(studentData[id].enrolledDate);
@@ -73,14 +73,16 @@ const PaymentScreen = ({ navigation, route }) => {
             }
             const batch = firestore().batch();
             const stdRef = firestore().collection("User").doc(userData.uid).collection("Student").doc(id)
-            batch.update(stdRef, { last_payment: final.getTime() })
+            batch.update(stdRef, { lastPayment: final.getTime() });
+            const classInfo = enrolledClasses.map((e) => { return { tutorId: e.tutorId, classId: e.id, fee: e.fee } });
             let obj = {
-                date: new Date().getTime(),
-                name: student.name,
+                createdDate: new Date().getTime(),
                 id: transId,
                 studentId: id,
                 value: total * currentMonths,
-                type: "payment"
+                type: "payment",
+                classInfo,
+                duration: currentMonths
             }
             const stdTransRef = firestore().collection("User").doc(userData.uid).collection("Student").doc(id).collection("Transaction").doc(transId);
             batch.set(stdTransRef, obj);
@@ -90,8 +92,13 @@ const PaymentScreen = ({ navigation, route }) => {
             batch.update(userRef, { transCount: firestore.FieldValue.increment(1) });
             await batch.commit();
             if (userData.isSmsEnabled && userData.msgCount > 0) {
-                await functions().httpsCallable('sendMessage')({ student, amount: total * currentMonths, userData });
+                functions().httpsCallable('sendMessage')({ student, amount: total * currentMonths, userData })
+                    .catch(() => {
+                        DropDownHolder.dropDown.alertWithType("error", "Sending message failed", "Error occurred while sending SMS!");
+                    })
             }
+            functions().httpsCallable('updateTutorTransaction')({ info: obj, userData })
+                .catch((error) => { console.log(error) })
             getStatus(final, studentData[id].enrolledDate);
             setIsLoading(false);
             DropDownHolder.dropDown.alertWithType("success", "Success", "Payment has been made successfully!");
@@ -105,17 +112,18 @@ const PaymentScreen = ({ navigation, route }) => {
         setId(t);
         setCamera(false);
         setStudent({ name: studentData[t].name, phone: studentData[t].phone, enrolledDate: studentData[t].enrolledDate });
-        getStatus(studentData[t].last_payment, studentData[t].enrolledDate);
-        const result = await firestore().collection("User").doc(userData.uid).collection("Student").doc(t).collection("EnrolledClass").get();
+        getStatus(studentData[t].lastPayment, studentData[t].enrolledDate);
         let total = 0, temp = [];
+        const result = studentData[t].enrolledClass;
         result.forEach((d) => {
             temp.push({
-                name: classData[d.id].name,
-                fee: classData[d.id].fee,
-                tutorName: tutorData[classData[d.id].tutor].name,
-                id: d.id
+                name: classData[d].name,
+                fee: classData[d].fee,
+                tutorName: tutorData[classData[d].tutorId].name,
+                tutorId: classData[d].tutorId,
+                id: d
             })
-            total += classData[d.id].fee;
+            total += classData[d].fee;
         })
         setEnrolledClasses(temp);
         setTotal(total);
@@ -175,7 +183,7 @@ const PaymentScreen = ({ navigation, route }) => {
                     </View>
 
                     <View style={{ marginTop: hp("2%") }}>
-                        <TransItem onPress={() => { actionSheetRef.current.show() }} name={student.name} date={student.phone} isMoney={false} text={`Enrolled on ${new Date(student.enrolledDate).toLocaleDateString("en-GB")}`} text1={studentData[id].last_payment} />
+                        <TransItem onPress={() => { actionSheetRef.current.show() }} name={student.name} date={student.phone} isMoney={false} text={`Enrolled on ${new Date(student.enrolledDate).toLocaleDateString("en-GB")}`} text1={studentData[id].lastPayment} />
                     </View>
 
                     <View style={{ marginTop: hp("2%"), padding: wp("4%"), width: wp("90%"), backgroundColor: color.white1, borderRadius: 12, alignSelf: "center" }}>

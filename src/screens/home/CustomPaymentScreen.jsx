@@ -30,12 +30,13 @@ const CustomPaymentScreen = ({ navigation, route }) => {
             setIsLoading(true);
             let transId = uuid.v4();
             let obj = {
-                date: new Date().getTime(),
-                name: studentData[id].name,
+                createdDate: new Date().getTime(),
                 id: transId,
                 studentId: id,
                 value: parseInt(fee),
                 type: "custom",
+                classInfo: null,
+                duration: null
             }
             const batch = firestore().batch();
             const stdRef = firestore().collection("User").doc(userData.uid).collection("Student").doc(id).collection("Transaction").doc(transId);

@@ -10,13 +10,14 @@ import TransItem from "../../components/TransItem";
 const HomeScreen = ({ navigation }) => {
 
     const [transList, setTransList] = useState([]);
+    const studentData = useSelector((state) => state.student.data);
 
     const transData = useSelector((state) => state.trans.data);
     const userData = useSelector((state) => state.user.data);
 
     useEffect(() => {
         setTransList(transData);
-    }, [transData, userData])
+    }, [transData, userData, studentData])
 
     return (
         <SafeAreaView style={styles.container}>
@@ -35,7 +36,7 @@ const HomeScreen = ({ navigation }) => {
                 <View style={{ marginTop: hp("3%") }}>
                     <FlatList
                         data={transList}
-                        renderItem={({ item }) => <TransItem isMoney={true} name={item.name} value={`${item.value} Rs`} date={new Date(item.date).toLocaleDateString("en-GB")} />}
+                        renderItem={({ item }) => <TransItem isMoney={true} name={studentData[item.studentId].name} value={`${item.value} Rs`} date={new Date(item.createdDate).toLocaleDateString("en-GB")} />}
                         keyExtractor={(item) => item.id}
                         contentContainerStyle={{ paddingBottom: hp("10%") }}
                     />

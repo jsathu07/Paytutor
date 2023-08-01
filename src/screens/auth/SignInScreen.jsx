@@ -23,11 +23,19 @@ const SignInScreen = ({ navigation }) => {
                 return;
             }
             setIsLoading(true);
-            await auth().signInWithEmailAndPassword(email, password);
+            const user = await auth().signInWithEmailAndPassword(email, password);
+            if (!user.user.emailVerified) {
+                DropDownHolder.dropDown.alertWithType("error", "Verify your email", "Please verify your email");
+            }
             setIsLoading(false);
         } catch (error) {
             setIsLoading(false);
-            DropDownHolder.dropDown.alertWithType("error", "Sign in failed", "Please try again after some time!");
+            if (error.code === "auth/wrong-password") {
+                DropDownHolder.dropDown.alertWithType("error", "Wrong password", "Please enter your correct password!");
+            }
+            if (error.code === "auth/user-not-found") {
+                DropDownHolder.dropDown.alertWithType("error", "User not found", "Please enter a valid email!");
+            }
         }
     }
 

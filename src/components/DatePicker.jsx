@@ -5,7 +5,7 @@ import { color, font } from "../utils/theme";
 import { Icon } from '@rneui/base';
 import DatePicker from 'react-native-date-picker'
 
-const CustomDatePicker = ({ value, onConfirm, type }) => {
+const CustomDatePicker = ({ value, onConfirm }) => {
 
     const [open, setOpen] = useState(false);
 
@@ -20,14 +20,7 @@ const CustomDatePicker = ({ value, onConfirm, type }) => {
                 open={open}
                 date={value}
                 onCancel={() => { setOpen(false) }}
-                onConfirm={(date) => {
-                    if (type === "initial") {
-                        date.setHours(0); date.setMinutes(0); date.setSeconds(0); date.setMilliseconds(0);
-                    } else {
-                        date.setHours(23); date.setMinutes(59); date.setSeconds(59); date.setMilliseconds(999);
-                    }
-                    setOpen(false); onConfirm(date);
-                }}
+                onConfirm={(date) => { setOpen(false); onConfirm(date); }}
                 mode="date"
             />
         </TouchableOpacity>

@@ -8,7 +8,12 @@ const Money = ({ text1, text2, text3, text4 }) => {
             <View style={{ width: wp("40%"), alignSelf: "flex-start" }}>
                 <Text style={styles.title0}>Pending balance</Text>
                 <Text style={styles.title1}>Rs. {text1}</Text>
-                <Text style={styles.title2}>Last paid {text4}</Text>
+                {
+                    text4 &&
+                    (
+                        <Text style={styles.title2}>Last paid {text4}</Text>
+                    )
+                }
             </View>
             <View style={{ width: wp("30%") }}>
                 <View>
@@ -16,7 +21,7 @@ const Money = ({ text1, text2, text3, text4 }) => {
                     <Text style={styles.innerTitle1}>{text2}</Text>
                 </View>
                 <View style={{ marginTop: hp("2%") }}>
-                    <Text style={[styles.innerTitle0, { color: color.orange0 }]}>{'\u2B24'}  Subscription</Text>
+                    <Text style={[styles.innerTitle0, { color: color.orange0 }]}>{'\u2B24'}  Transactions</Text>
                     <Text style={styles.innerTitle1}>{text3}</Text>
                 </View>
             </View>

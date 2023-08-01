@@ -79,6 +79,8 @@ const SignUpScreen = ({ navigation }) => {
                 transCount: 0
             }
             await firestore().collection("User").doc(authResult.user.uid).set(userData);
+            await auth().currentUser.sendEmailVerification();
+            navigation.navigate("SignIn");
             setIsLoading(false);
         } catch (error) {
             setIsLoading(false);
@@ -126,7 +128,7 @@ const SignUpScreen = ({ navigation }) => {
 
                         <CheckBox checked={checked} text="Accept terms and conditions" onPress={() => { setChecked(!checked) }} />
 
-                        <Button style={{ marginTop: hp("5%") }} onPress={SignUp} text="Sign Up" />
+                        <Button style={{ marginTop: hp("0%") }} onPress={SignUp} text="Sign Up" />
 
                         <TextClick onPress={() => { navigation.navigate("SignIn") }} text1="Already have an account?" text2="Sign In" />
 

@@ -45,22 +45,26 @@ const RegistrationScreen = ({ navigation }) => {
                 time.setMonth(time.getMonth() + 1);
             }
             const finalTime = time.getTime();
-            const result = await firestore().collection("User").doc(userData.uid).collection("Student").add({ name: name.trim(), phone, last_payment: null, enrolledDate: finalTime })
+            const result = await firestore().collection("User").doc(userData.uid).collection("Student").add({ name: name.trim(), phone, lastPayment: null, enrolledDate: finalTime });
+            const batch = firestore().batch();
             enrolledClass.forEach(async (classId) => {
-                await firestore().collection("User").doc(userData.uid).collection("Student").doc(result.id).collection("EnrolledClass").doc(classId).set({ enrolledDate: finalTime, id: result.id })
-                await firestore().collection("User").doc(userData.uid)
-                    .collection("Class").doc(classId)
-                    .collection("Student").doc(result.id).set({ enrolledDate: finalTime, id: result.id })
-                await firestore().collection("User").doc(userData.uid).collection("Class").doc(classId).update({
-                    count: firestore.FieldValue.increment(1)
-                })
+                const refOne = firestore().collection("User").doc(userData.uid).collection("Student").doc(result.id);
+                batch.update(refOne, { enrolledClass: firestore.FieldValue.arrayUnion(classId) });
+                const refTwo = firestore().collection("User").doc(userData.uid).collection("Class").doc(classId).collection("Student").doc(result.id);
+                batch.set(refTwo, { enrolledDate: finalTime });
+                const refThree = firestore().collection("User").doc(userData.uid).collection("Class").doc(classId);
+                batch.update(refThree, { count: firestore.FieldValue.increment(1) });
             })
-            setEnrolledClass([]);
-            setPhone("");
-            setId(result.id);
-            setIsLoading(false);
-            setShowQR(true);
-            DropDownHolder.dropDown.alertWithType("success", "Success", "Student has been added successfully!");
+            batch.commit()
+                .then(() => {
+                    setEnrolledClass([]);
+                    setPhone("");
+                    setChecked(false);
+                    setId(result.id);
+                    setIsLoading(false);
+                    setShowQR(true);
+                    DropDownHolder.dropDown.alertWithType("success", "Success", "Student has been added successfully!");
+                })
         } catch (error) {
             setIsLoading(false);
             DropDownHolder.dropDown.alertWithType("error", "Operation failed", "Please restart the app and try again!");

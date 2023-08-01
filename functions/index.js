@@ -26,4 +26,25 @@ exports.sendMessage = functions.https.onCall(async (data, context) => {
     } catch (error) {
         return { result: "failed" };
     }
-});
+})
+
+exports.updateTutorTransaction = functions.https.onCall(async (data, context) => {
+    const classInfo = data.info.classInfo;
+    const tutor = new Map();
+    classInfo.forEach((e) => {
+        let total = e.fee * data.info.duration;
+        if (tutor.get(e.tutorId) !== undefined) {
+            tutor.set(e.tutorId, tutor.get(e.tutorId) + total);
+        } else {
+            tutor.set(e.tutorId, total);
+        }
+    })
+    const batch = admin.firestore().batch();
+    tutor.forEach((value, key) => {
+        const ref = admin.firestore().collection("User").doc(data.userData.uid).collection("Tutor").doc(key);
+        batch.update(ref, { amount: admin.firestore.FieldValue.increment(value) });
+        const refTwo = admin.firestore().collection("User").doc(data.userData.uid).collection("Tutor").doc(key).collection("Transaction").doc(data.info.id)
+        batch.set(refTwo, { createdDate: data.info.createdDate, amount: value, type: "studentPayment" });
+    })
+    return batch.commit();
+})

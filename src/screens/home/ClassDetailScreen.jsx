@@ -65,7 +65,7 @@ const ClassDetailScreen = ({ navigation, route }) => {
             x.setMonth(m);
             setCurrDate(x);
             userList.forEach((e) => {
-                final.push({ ...e, status: getStatus(studentData[e.id].last_payment, studentData[e.id].enrolledDate) })
+                final.push({ ...e, status: getStatus(studentData[e.id].lastPayment, studentData[e.id].enrolledDate) })
             })
         } else {
             final = initialList;
@@ -79,7 +79,7 @@ const ClassDetailScreen = ({ navigation, route }) => {
         const result = await firestore().collection("User").doc(userData.uid).collection("Class").doc(route.params.id).collection("Student").get();
         const temp = [];
         result.forEach((d) => {
-            let status = getStatus(studentData[d.id].last_payment, studentData[d.id].enrolledDate);
+            let status = getStatus(studentData[d.id].lastPayment, studentData[d.id].enrolledDate);
             temp.push({
                 name: studentData[d.id].name,
                 status,
