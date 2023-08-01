@@ -6,6 +6,7 @@ import Loader from '../../components/Loader';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 import NavBar from '../../components/NavBar';
+import DropDownHolder from '../../utils/Dropdown';
 
 const UpdateScreen = ({ navigation, route }) => {
 
@@ -16,10 +17,16 @@ const UpdateScreen = ({ navigation, route }) => {
 
     const updateData = async () => {
         setIsLoading(true);
-        //trim name and phone
-        ref.update(data);
-        setIsLoading(false);
-        navigation.navigate("Main");
+        try {
+            //trim name and phone
+            await ref.update(data);
+            DropDownHolder.dropDown.alertWithType("success", "Success", "Update has been made successfully!");
+        } catch (error) {
+            DropDownHolder.dropDown.alertWithType("error", "Error occurred", "Error occurred while updating!");
+        } finally {
+            setIsLoading(false);
+            navigation.navigate("Main");
+        }
     }
 
     useEffect(() => {

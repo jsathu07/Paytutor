@@ -74,7 +74,7 @@ const PaymentScreen = ({ navigation, route }) => {
             const batch = firestore().batch();
             const stdRef = firestore().collection("User").doc(userData.uid).collection("Student").doc(id)
             batch.update(stdRef, { lastPayment: final.getTime() });
-            const classInfo = enrolledClasses.map((e) => { return { tutorId: e.tutorId, classId: e.id, fee: e.fee } });
+            const classInfo = enrolledClasses.map((e) => { return { tutorId: e.tutorId, classId: e.id, fee: e.fee, tutorPercentage: e.tutorPercentage } });
             let obj = {
                 createdDate: new Date().getTime(),
                 id: transId,
