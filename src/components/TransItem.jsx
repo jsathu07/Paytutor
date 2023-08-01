@@ -4,15 +4,24 @@ import UserAvatar from 'react-native-user-avatar';
 import { Icon } from '@rneui/base';
 import { color, font, scheme } from "../utils/theme";
 
-const TransItem = ({ style = {}, name, value = "", date, isMoney, url = "", onPress, text = "", text1 = null, isUser = false }) => {
+const TransItem = ({ onLongPress = () => null, style = {}, name, value = "", date, isMoney, onPress, text = "", text1 = null, isUser = false }) => {
     return (
-        <TouchableOpacity onPress={onPress}>
+        <TouchableOpacity onPress={onPress} onLongPress={onLongPress}>
             <View style={[styles.itemContainer, style]}>
                 <View style={{ flexDirection: "row", alignItems: "center" }}>
                     <UserAvatar bgColors={scheme} size={wp("10%")} name={name} />
                     <View style={{ marginLeft: wp("5%") }}>
                         <Text style={styles.innerTitle}>{name}</Text>
                         <Text style={styles.innerTitleTwo}>{date}</Text>
+                        {
+                            isUser &&
+                            (
+                                <View style={{ flexDirection: "row", marginTop: hp("1%"), alignItems: "center" }}>
+                                    <Icon name="people-circle-outline" type="ionicon" size={wp("5%")} color={color.black0} />
+                                    <Text style={styles.user}>  {value}  student(s)</Text>
+                                </View>
+                            )
+                        }
                         {
                             text !== "" &&
                             (
@@ -31,15 +40,6 @@ const TransItem = ({ style = {}, name, value = "", date, isMoney, url = "", onPr
                     isMoney &&
                     (
                         <Text style={styles.money}>{value}</Text>
-                    )
-                }
-                {
-                    isUser &&
-                    (
-                        <View style={{ flexDirection: "row", marginTop: hp("1%"), alignItems: "center", width: wp("25%"), marginRight: wp("5%"), justifyContent: "flex-end" }}>
-                            <Icon name="people-circle-outline" type="ionicon" size={wp("6%")} color={color.black0} />
-                            <Text style={styles.user}>   {value}</Text>
-                        </View>
                     )
                 }
             </View>
@@ -82,6 +82,7 @@ const styles = StyleSheet.create({
         fontSize: wp("3.5%"),
         color: color.black0,
         fontFamily: font.semibold,
+        width: wp("40%"),
     }
 })
 

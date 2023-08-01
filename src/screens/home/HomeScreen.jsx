@@ -36,7 +36,7 @@ const HomeScreen = ({ navigation }) => {
                 <View style={{ marginTop: hp("3%") }}>
                     <FlatList
                         data={transList}
-                        renderItem={({ item }) => <TransItem isMoney={true} name={studentData[item.studentId].name} value={`${item.value} Rs`} date={new Date(item.createdDate).toLocaleDateString("en-GB")} />}
+                        renderItem={({ item }) => <TransItem isMoney={true} name={studentData[item.studentId]?.name} value={`${item.value} Rs`} date={new Date(item.createdDate).toLocaleDateString("en-GB")} />}
                         keyExtractor={(item) => item.id}
                         contentContainerStyle={{ paddingBottom: hp("10%") }}
                     />

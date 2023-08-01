@@ -10,6 +10,7 @@ import ClassRegisterScreen from './src/screens/home/ClassRegisterScreen';
 import ClassDetailScreen from './src/screens/home/ClassDetailScreen';
 import TransactionScreen from './src/screens/home/TransactionScreen';
 import CustomPaymentScreen from './src/screens/home/CustomPaymentScreen';
+import UpdateScreen from './src/screens/home/UpdateScreen';
 
 import { color, font } from './src/utils/theme';
 import { View } from 'react-native';
@@ -79,6 +80,7 @@ const App = () => {
               <Stack.Screen name="ClassDetail" component={ClassDetailScreen} />
               <Stack.Screen name="Transaction" component={TransactionScreen} />
               <Stack.Screen name="CustomPayment" component={CustomPaymentScreen} />
+              <Stack.Screen name="Update" component={UpdateScreen} />
             </Stack.Navigator>
           </NavigationContainer>
           <DropdownAlert

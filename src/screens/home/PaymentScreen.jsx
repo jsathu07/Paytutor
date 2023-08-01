@@ -130,6 +130,13 @@ const PaymentScreen = ({ navigation, route }) => {
         setIsLoading(false)
     }
 
+    const updateStudentData = () => {
+        const ref = firestore().collection("User").doc(userData.uid).collection("Student").doc(id);
+        const temp = [{ fieldName: "Name", fieldValue: "name", keyboardType: "default" }, { fieldName: "Phone", fieldValue: "phone", keyboardType: "phone-pad" }];
+        const obj = { name: student.name, phone: student.phone };
+        navigation.navigate("Update", { data: obj, ref, value: temp });
+    }
+
     useEffect(() => {
         const mode = route.params.mode;
         if (mode === "Camera") {
@@ -183,7 +190,7 @@ const PaymentScreen = ({ navigation, route }) => {
                     </View>
 
                     <View style={{ marginTop: hp("2%") }}>
-                        <TransItem onPress={() => { actionSheetRef.current.show() }} name={student.name} date={student.phone} isMoney={false} text={`Enrolled on ${new Date(student.enrolledDate).toLocaleDateString("en-GB")}`} text1={studentData[id].lastPayment} />
+                        <TransItem onLongPress={updateStudentData} onPress={() => { actionSheetRef.current.show() }} name={student.name} date={student.phone} isMoney={false} text={`Enrolled on ${new Date(student.enrolledDate).toLocaleDateString("en-GB")}`} text1={studentData[id].lastPayment} />
                     </View>
 
                     <View style={{ marginTop: hp("2%"), padding: wp("4%"), width: wp("90%"), backgroundColor: color.white1, borderRadius: 12, alignSelf: "center" }}>
