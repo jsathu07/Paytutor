@@ -16,6 +16,7 @@ const ClassRegisterScreen = ({ navigation }) => {
 
     const [name, setName] = useState("");
     const [fee, setFee] = useState("");
+    const [tutorPercentage, setTutorPercentage] = useState("");
     const [selectedTutor, setSelectedTutor] = useState("");
     const [tutorName, setTutorName] = useState("");
     const [tutorList, setTutorList] = useState([]);
@@ -45,12 +46,12 @@ const ClassRegisterScreen = ({ navigation }) => {
 
     const registerClass = async () => {
         try {
-            if (name === "" || parseInt(fee) <= 0 || selectedTutor === "") {
-                DropDownHolder.dropDown.alertWithType("error", "Missing details", "Please enter all details!");
+            if (name === "" || parseInt(fee) <= 0 || Number.isNaN(parseInt(fee)) || selectedTutor === "" || parseInt(tutorPercentage) < 0 || parseInt(tutorPercentage) > 100 || Number.isNaN(parseInt(tutorPercentage))) {
+                DropDownHolder.dropDown.alertWithType("error", "Missing details", "Please check all details!");
                 return;
             }
             setIsLoading(true);
-            const result = await firestore().collection("User").doc(userData.uid).collection("Class").add({ name: name.trim(), fee: parseInt(fee), tutorId: selectedTutor, count: 0, createdDate: new Date().getTime() });
+            const result = await firestore().collection("User").doc(userData.uid).collection("Class").add({ name: name.trim(), fee: parseInt(fee), tutorId: selectedTutor, count: 0, createdDate: new Date().getTime(), tutorPercentage: parseInt(tutorPercentage) });
             await firestore().collection("User").doc(userData.uid).collection("Tutor").doc(selectedTutor)
                 .update({
                     enrolledClass: firestore.FieldValue.arrayUnion(result.id)
@@ -100,6 +101,8 @@ const ClassRegisterScreen = ({ navigation }) => {
                                     <Input placeholder="Enter class name ..." type="text" onChangeText={(name) => { setName(name) }} value={name} />
                                     <Text style={styles.text0}>Fee</Text>
                                     <Input placeholder="Enter class fee ..." keyboardType="number-pad" type="number" onChangeText={(fee) => { setFee(fee) }} value={fee} />
+                                    <Text style={styles.text0}>Tutor percentage</Text>
+                                    <Input placeholder="Enter tutor percentage ..." keyboardType="number-pad" type="number" onChangeText={(p) => { setTutorPercentage(p) }} value={tutorPercentage} />
                                     <Text style={styles.text0}>Tutor</Text>
                                     <Picker onOpen={() => { setIsScrollEnabled(false) }} onClose={() => { setIsScrollEnabled(true) }} placeholder="Select a tutor ..." max={1} data={tutorList} value={tutorList} onChangeValue={(selectedTutor) => {
                                         if (selectedTutor.length > 0) {

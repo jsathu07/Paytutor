@@ -121,6 +121,7 @@ const PaymentScreen = ({ navigation, route }) => {
                 fee: classData[d].fee,
                 tutorName: tutorData[classData[d].tutorId].name,
                 tutorId: classData[d].tutorId,
+                tutorPercentage: classData[d].tutorPercentage,
                 id: d
             })
             total += classData[d].fee;

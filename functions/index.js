@@ -32,7 +32,7 @@ exports.updateTutorTransaction = functions.https.onCall(async (data, context) =>
     const classInfo = data.info.classInfo;
     const tutor = new Map();
     classInfo.forEach((e) => {
-        let total = e.fee * data.info.duration;
+        let total = (e.fee * data.info.duration * e.tutorPercentage) / 100;
         if (tutor.get(e.tutorId) !== undefined) {
             tutor.set(e.tutorId, tutor.get(e.tutorId) + total);
         } else {
