@@ -25,6 +25,7 @@ const SignInScreen = ({ navigation }) => {
             setIsLoading(true);
             const user = await auth().signInWithEmailAndPassword(email, password);
             if (!user.user.emailVerified) {
+                await auth().signOut();
                 DropDownHolder.dropDown.alertWithType("error", "Verify your email", "Please verify your email");
             }
             setIsLoading(false);

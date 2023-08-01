@@ -33,7 +33,7 @@ const ClassRegisterScreen = ({ navigation }) => {
                 return;
             }
             setIsLoading(true);
-            await firestore().collection("User").doc(userData.uid).collection("Tutor").add({ name: tutorName.trim(), enrolledDate: new Date().getTime() });
+            await firestore().collection("User").doc(userData.uid).collection("Tutor").add({ name: tutorName.trim(), enrolledDate: new Date().getTime(), lastPayment: null });
             setTutorName("");
             setIsLoading(false);
             DropDownHolder.dropDown.alertWithType("success", "Success", "Tutor has been added successfully!");

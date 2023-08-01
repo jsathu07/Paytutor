@@ -80,6 +80,7 @@ const SignUpScreen = ({ navigation }) => {
             }
             await firestore().collection("User").doc(authResult.user.uid).set(userData);
             await auth().currentUser.sendEmailVerification();
+            await auth().signOut();
             navigation.navigate("SignIn");
             setIsLoading(false);
         } catch (error) {

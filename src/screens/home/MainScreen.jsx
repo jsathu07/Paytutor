@@ -10,6 +10,7 @@ import firestore from '@react-native-firebase/firestore';
 import HomeScreen from './HomeScreen';
 import ClassScreen from './ClassScreen';
 import RegistrationScreen from './RegistrationScreen';
+import TutorDetailScreen from './TutorDetailScreen';
 import SettingsScreen from './SettingsScreen';
 import { getData } from '../../store/data';
 import { getStudent } from '../../store/student';
@@ -96,6 +97,8 @@ const MainScreen = () => {
                         iconName = "list-outline"
                     } else if (route.name === "Settings") {
                         iconName = "settings-outline"
+                    } else if (route.name === "TutorDetails") {
+                        iconName = "man-outline"
                     } else {
                         iconName = "person-add-outline"
                     }
@@ -106,6 +109,7 @@ const MainScreen = () => {
             <Tab.Screen name="Home" component={HomeScreen} />
             <Tab.Screen name="Class" component={ClassScreen} />
             <Tab.Screen name="Register" component={RegistrationScreen} />
+            <Tab.Screen name="TutorDetails" component={TutorDetailScreen} />
             <Tab.Screen name="Settings" component={SettingsScreen} />
         </Tab.Navigator>
     )

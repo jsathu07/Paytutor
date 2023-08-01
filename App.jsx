@@ -11,6 +11,7 @@ import ClassDetailScreen from './src/screens/home/ClassDetailScreen';
 import TransactionScreen from './src/screens/home/TransactionScreen';
 import CustomPaymentScreen from './src/screens/home/CustomPaymentScreen';
 import UpdateScreen from './src/screens/home/UpdateScreen';
+import TutorScreen from './src/screens/home/TutorScreen';
 
 import { color, font } from './src/utils/theme';
 import { View } from 'react-native';
@@ -33,7 +34,7 @@ const App = () => {
   const handleAuth = (user) => {
     if (user !== null) {
       if (!user.emailVerified) {
-        DropDownHolder.dropDown.alertWithType("error", "Verify your email", "Please verify your email");
+        DropDownHolder.dropDown.alertWithType("error", "Verify your email", "Please verify your email!");
         setUser(null);
       } else {
         setUser(user);
@@ -81,6 +82,7 @@ const App = () => {
               <Stack.Screen name="Transaction" component={TransactionScreen} />
               <Stack.Screen name="CustomPayment" component={CustomPaymentScreen} />
               <Stack.Screen name="Update" component={UpdateScreen} />
+              <Stack.Screen name="Tutor" component={TutorScreen} />
             </Stack.Navigator>
           </NavigationContainer>
           <DropdownAlert
