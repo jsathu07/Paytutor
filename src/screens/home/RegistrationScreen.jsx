@@ -115,7 +115,7 @@ const RegistrationScreen = ({ navigation }) => {
                                         <Picker onOpen={() => { setIsScrollEnabled(false) }} onClose={() => { setIsScrollEnabled(true) }} placeholder="Select a class ..." val={enrolledClass} max={null} data={classList} onChangeValue={(enrolledClass) => { setEnrolledClass(enrolledClass) }} />
                                     </View>
 
-                                    <CheckBox checked={checked} text="Register for next month" onPress={() => { setChecked(!checked) }} />
+                                    <CheckBox isLink={false} checked={checked} text="Register for next month" onPress={() => { setChecked(!checked) }} />
 
                                     <Button text="Register" onPress={registerStudent} />
                                 </View>

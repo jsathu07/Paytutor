@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { SafeAreaView, StyleSheet, View, Text, ScrollView, StatusBar, Image, ActivityIndicator } from 'react-native';
+import { SafeAreaView, StyleSheet, View, Text, ScrollView, StatusBar, Image, Linking } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import auth from '@react-native-firebase/auth';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -127,7 +127,7 @@ const SignUpScreen = ({ navigation }) => {
                             <Option onPress={() => { openGallery() }} checked={selectedImg !== "" ? true : false} />
                         </View>
 
-                        <CheckBox checked={checked} text="Accept terms and conditions" onPress={() => { setChecked(!checked) }} />
+                        <CheckBox isLink={true} onLinkPress={() => { Linking.openURL("https://paytutor.web.app/privacy.html") }} checked={checked} text="Accept terms and conditions" onPress={() => { setChecked(!checked) }} />
 
                         <Button style={{ marginTop: hp("0%") }} onPress={SignUp} text="Sign Up" />
 

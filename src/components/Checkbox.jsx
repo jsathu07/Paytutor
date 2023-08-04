@@ -1,12 +1,11 @@
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { CheckBox } from '@rneui/base';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { color, font } from "../utils/theme";
-import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const CustomCheckBox = ({ text, checked, onPress, isLink = false, onLinkPress = () => null }) => {
     return (
-        <View>
+        <View style={styles.container}>
             <CheckBox
                 title={text}
                 containerStyle={styles.checkboxContainer}
@@ -31,13 +30,20 @@ const CustomCheckBox = ({ text, checked, onPress, isLink = false, onLinkPress = 
 }
 
 const styles = StyleSheet.create({
-    checkboxContainer: {
-        padding: wp("4%"),
-        paddingLeft: 0,
-        width: wp("85%"),
+    container: {
+        flexDirection: "row",
         alignSelf: "center",
         marginTop: hp("3%"),
-        marginBottom: hp("4%")
+        marginBottom: hp("4%"),
+        alignItems: "center",
+        width: wp("85%"),
+    },
+    checkboxContainer: {
+        paddingLeft: 0,
+        width: wp("70%"),
+        margin: 0,
+        marginLeft: 0,
+        marginRight: 0,
     },
     checkboxText: {
         fontFamily: font.bold,
@@ -47,10 +53,11 @@ const styles = StyleSheet.create({
         marginLeft: wp("5%")
     },
     text: {
-        fontFamily: font.semibold,
+        fontFamily: font.bold,
         fontSize: wp("4%"),
         color: color.blue0,
-        marginLeft: wp("5%")
+        lineHeight: 15,
+        marginLeft: wp("3%"),
     }
 })
 
