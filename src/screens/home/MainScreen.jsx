@@ -25,9 +25,14 @@ const MainScreen = () => {
 
     const fetchData = async () => {
         const uid = auth().currentUser.uid;
+        const e = await auth().currentUser.getIdTokenResult(true);
+        const isAdmin = e.claims.admin === true;
+        if (isAdmin) {
+            const result = firestore().collection("Admin").doc(e.claims.uid).get()
+        }
         firestore().collection("User").doc(uid)
             .onSnapshot((d) => {
-                dispatch(getUser(d.data()))
+                dispatch(getUser({ ...d.data(), isAdmin }))
             })
         let temp2 = {};
         firestore().collection("User").doc(uid).collection("Tutor")

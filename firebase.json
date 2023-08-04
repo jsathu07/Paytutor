@@ -12,6 +12,7 @@
     }
   ],
   "hosting": {
+    "site": "paytutor",
     "public": "public",
     "ignore": [
       "firebase.json",

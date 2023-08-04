@@ -48,3 +48,7 @@ exports.updateTutorTransaction = functions.https.onCall(async (data, context) =>
     })
     return batch.commit();
 })
+
+exports.setAdmin = functions.https.onCall(async (data, context) => {
+    return admin.auth().setCustomUserClaims(data.uid, { admin: true }).then(() => { return { value: "success" } }).catch(() => { return { value: "failed" } })
+})

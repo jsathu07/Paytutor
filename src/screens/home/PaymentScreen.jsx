@@ -92,13 +92,12 @@ const PaymentScreen = ({ navigation, route }) => {
             batch.update(userRef, { transCount: firestore.FieldValue.increment(1) });
             await batch.commit();
             if (userData.isSmsEnabled && userData.msgCount > 0) {
-                functions().httpsCallable('sendMessage')({ student, amount: total * currentMonths, userData })
-                    .catch(() => {
-                        DropDownHolder.dropDown.alertWithType("error", "Sending message failed", "Error occurred while sending SMS!");
-                    })
+                await functions().httpsCallable('sendMessage')({ student, amount: total * currentMonths, userData })
+                // .catch(() => {
+                //     DropDownHolder.dropDown.alertWithType("error", "Sending message failed", "Error occurred while sending SMS!");
+                // })
             }
-            functions().httpsCallable('updateTutorTransaction')({ info: obj, userData })
-                .catch((error) => { console.log(error) })
+            await functions().httpsCallable('updateTutorTransaction')({ info: obj, userData })
             getStatus(final, studentData[id].enrolledDate);
             setIsLoading(false);
             DropDownHolder.dropDown.alertWithType("success", "Success", "Payment has been made successfully!");

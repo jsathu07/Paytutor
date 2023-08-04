@@ -2,8 +2,9 @@ import { StyleSheet, View } from 'react-native';
 import { CheckBox } from '@rneui/base';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { color, font } from "../utils/theme";
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
-const CustomCheckBox = ({ text, checked, onPress }) => {
+const CustomCheckBox = ({ text, checked, onPress, isLink = false, onLinkPress = () => null }) => {
     return (
         <View>
             <CheckBox
@@ -18,6 +19,13 @@ const CustomCheckBox = ({ text, checked, onPress }) => {
                 checked={checked}
                 onPress={onPress}
             />
+            {
+                isLink && (
+                    <TouchableOpacity onPress={onLinkPress}>
+                        <Text style={styles.text}>View</Text>
+                    </TouchableOpacity>
+                )
+            }
         </View>
     )
 }
@@ -36,6 +44,12 @@ const styles = StyleSheet.create({
         fontSize: wp("4%"),
         fontWeight: "normal",
         lineHeight: 15,
+        marginLeft: wp("5%")
+    },
+    text: {
+        fontFamily: font.semibold,
+        fontSize: wp("4%"),
+        color: color.blue0,
         marginLeft: wp("5%")
     }
 })
