@@ -28,9 +28,14 @@ const HomeScreen = ({ navigation }) => {
             <View style={styles.bottomContainer}>
                 <View style={styles.textContainer}>
                     <Text style={styles.title}>Recent transactions</Text>
-                    <TouchableOpacity onPress={() => { navigation.navigate("Transaction") }}>
-                        <Text style={styles.subtitle}>Show all</Text>
-                    </TouchableOpacity>
+                    {
+                        !(userData?.isAdmin) &&
+                        (
+                            <TouchableOpacity onPress={() => { navigation.navigate("Transaction") }}>
+                                <Text style={styles.subtitle}>Show all</Text>
+                            </TouchableOpacity>
+                        )
+                    }
                 </View>
 
                 <View style={{ marginTop: hp("3%") }}>

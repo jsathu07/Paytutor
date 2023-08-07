@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { SafeAreaView, StyleSheet, View, Text, ScrollView, StatusBar, Image, Linking } from 'react-native';
+import { SafeAreaView, StyleSheet, View, Text, ScrollView, StatusBar, Image, Linking, TouchableOpacity } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import auth from '@react-native-firebase/auth';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -14,6 +14,7 @@ import DropDownHolder from "../../utils/Dropdown";
 import { color, font } from '../../utils/theme';
 import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import TextClick from "../../components/TextClick";
+import { Icon } from '@rneui/base';
 
 const SignUpScreen = ({ navigation }) => {
 
@@ -112,7 +113,12 @@ const SignUpScreen = ({ navigation }) => {
 
                     <View style={{ borderColor: color.white0, borderWidth: 1, borderTopRightRadius: 25, borderTopLeftRadius: 25, backgroundColor: color.white0 }}>
 
-                        <Text style={styles.title0}>Sign up for an account</Text>
+                        <View style={styles.topContainer}>
+                            <Text style={styles.title0}>Sign up for an account</Text>
+                            <TouchableOpacity onPress={() => { navigation.navigate("AdminAuth") }}>
+                                <Icon name="person-add-outline" type="ionicon" size={wp("7%")} />
+                            </TouchableOpacity>
+                        </View>
 
                         <View style={styles.textBox}>
                             <Text style={styles.text0}>Organization name</Text>
@@ -148,12 +154,17 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: color.blue0,
     },
+    topContainer: {
+        flexDirection: "row",
+        width: wp("85%"),
+        justifyContent: "space-between",
+        marginTop: hp("5%"),
+        alignSelf: "center",
+    },
     title0: {
         fontSize: wp("5%"),
         color: color.black0,
         fontFamily: font.bold,
-        marginTop: hp("5%"),
-        marginLeft: wp("8%")
     },
     textBox: {
         marginTop: hp("5%"),

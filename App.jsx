@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import SignUpScreen from './src/screens/auth/SignUpScreen';
 import SignInScreen from './src/screens/auth/SignInScreen';
+import AdminAuthScreen from './src/screens/auth/AdminAuthScreen';
 import MainScreen from './src/screens/home/MainScreen';
 import PaymentScreen from './src/screens/home/PaymentScreen';
 import ClassRegisterScreen from './src/screens/home/ClassRegisterScreen';
@@ -35,7 +36,8 @@ const App = () => {
     if (user !== null) {
       if (!user.emailVerified) {
         DropDownHolder.dropDown.alertWithType("error", "Verify your email", "Please verify your email!");
-        setUser(null);
+        setUser(user);
+        // setUser(null);
       } else {
         setUser(user);
       }
@@ -58,6 +60,7 @@ const App = () => {
             <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="SignIn">
               <Stack.Screen name="SignIn" component={SignInScreen} />
               <Stack.Screen name="SignUp" component={SignUpScreen} />
+              <Stack.Screen name="AdminAuth" component={AdminAuthScreen} />
             </Stack.Navigator>
           </NavigationContainer>
           <DropdownAlert

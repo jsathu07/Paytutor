@@ -33,8 +33,8 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: "row",
         alignSelf: "center",
-        marginTop: hp("3%"),
-        marginBottom: hp("4%"),
+        marginTop: hp("4%"),
+        marginBottom: hp("5%"),
         alignItems: "center",
         width: wp("85%"),
     },

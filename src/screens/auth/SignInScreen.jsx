@@ -23,10 +23,10 @@ const SignInScreen = ({ navigation }) => {
             }
             setIsLoading(true);
             const user = await auth().signInWithEmailAndPassword(email, password);
-            if (!user.user.emailVerified) {
-                await auth().signOut();
-                DropDownHolder.dropDown.alertWithType("error", "Verify your email", "Please verify your email");
-            }
+            // if (!user.user.emailVerified) {
+            //     await auth().signOut();
+            //     DropDownHolder.dropDown.alertWithType("error", "Verify your email", "Please verify your email");
+            // }
             setIsLoading(false);
         } catch (error) {
             setIsLoading(false);
@@ -65,8 +65,6 @@ const SignInScreen = ({ navigation }) => {
                         <Button style={{ marginTop: hp("2%") }} onPress={SignIn} text="Sign In" />
 
                         <TextClick onPress={() => { navigation.navigate("SignUp") }} text1="Don't have an account?" text2="Sign Up" />
-
-                        <Button style={{ marginTop: hp("2%") }} onPress={() => { navigation.navigate("Admin") }} text="Admin" />
 
                     </View>
 

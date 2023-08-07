@@ -9,12 +9,11 @@ import DropDownHolder from "../../utils/Dropdown";
 import { color, font } from '../../utils/theme';
 import Loader from "../../components/Loader";
 
-const AdminAuthScreen = () => {
+const AdminAuthScreen = ({ navigation }) => {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [isLoading, setIsLoading] = useState(false);
-    const [isAdmin, setIsAdmin] = useState(false);
 
     const createAdmin = async () => {
         try {
@@ -24,9 +23,11 @@ const AdminAuthScreen = () => {
             }
             setIsLoading(true);
             const result = await auth().createUserWithEmailAndPassword(email, password);
-            functions().httpsCallable('setAdmin')({ uid: result.user.uid })
-                .catch((error) => { console.log(error) })
+            await functions().httpsCallable('setAdmin')({ uid: result.user.uid });
+            await auth().currentUser.sendEmailVerification();
+            await auth().signOut();
             setIsLoading(false);
+            navigation.navigate("SignIn");
         } catch (error) {
             setIsLoading(false);
             if (error.code === "auth/wrong-password") {
@@ -38,23 +39,11 @@ const AdminAuthScreen = () => {
         }
     }
 
-    const checkAdmin = async () => {
-        const e = await auth().currentUser.getIdTokenResult(true);
-        const isAdmin = e.claims.admin === true;
-        if (isAdmin) {
-            setIsAdmin(true);
-        }
-    }
-
-    useEffect(() => {
-        checkAdmin();
-    }, [])
-
     if (isLoading) {
         return (
             <Loader />
         )
-    } else if (isAdmin) {
+    } else {
         return (
             <SafeAreaView style={styles.container}>
                 <ScrollView>
@@ -79,15 +68,6 @@ const AdminAuthScreen = () => {
 
                     <StatusBar backgroundColor={color.blue0} />
                 </ScrollView>
-            </SafeAreaView>
-        )
-    } else {
-        return (
-            <SafeAreaView style={{ flex: 1, backgroundColor: color.white0, justifyContent: "center", alignItems: "center" }}>
-
-                <Text style={styles.text1}>Contact your account owner</Text>
-
-                <StatusBar backgroundColor={color.blue0} />
             </SafeAreaView>
         )
     }

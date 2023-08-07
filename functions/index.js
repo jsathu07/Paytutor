@@ -52,3 +52,24 @@ exports.updateTutorTransaction = functions.https.onCall(async (data, context) =>
 exports.setAdmin = functions.https.onCall(async (data, context) => {
     return admin.auth().setCustomUserClaims(data.uid, { admin: true }).then(() => { return { value: "success" } }).catch(() => { return { value: "failed" } })
 })
+
+exports.addAdmin = functions.https.onCall(async (data, context) => {
+    const userData = data.userData;
+    const email = data.email;
+    try {
+        const result = await admin.auth().getUserByEmail(email);
+        if (result !== undefined && result?.customClaims.admin) {
+            await admin.firestore().collection("Admin").doc(result.uid).collection("Organization").doc(userData.uid).set({
+                enrolledDate: new Date().getTime()
+            })
+            await admin.firestore().collection("User").doc(userData.uid).collection("Admin").doc(result.uid).set({
+                enrolledDate: new Date().getTime(),
+                name: result.displayName,
+                img: result.photoURL
+            })
+            return { status: "Success" };
+        }
+    } catch (error) {
+        return { status: "Failed" };
+    }
+})

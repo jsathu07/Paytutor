@@ -9,6 +9,8 @@ import { color, font } from '../../utils/theme';
 import Money from '../../components/Money';
 import { useSelector } from "react-redux";
 import Loader from '../../components/Loader';
+import Button from '../../components/Button';
+import functions from '@react-native-firebase/functions';
 
 const SettingsScreen = () => {
 
@@ -30,7 +32,7 @@ const SettingsScreen = () => {
     }
 
     useEffect(() => {
-
+        console.log(userData?.isAdmin);
     }, [userData])
 
     if (isLoading) {
@@ -57,6 +59,12 @@ const SettingsScreen = () => {
 
                         <SettingsItem name="trash-bin-outline" primary={color.red1} secondary={color.red1} text="Sign Out" text1="Sign out from your account" onPress={signOut} />
                     </View>
+
+                    <Button text="press me" onPress={() => {
+                        functions().httpsCallable('addAdmin')({ email: "mesathu3m@gmail.com", userData })
+                            .then((e) => { console.log(e) })
+                            .catch((e) => { console.log(e) })
+                    }} />
 
                     <View style={{ height: hp("5%") }}></View>
 
