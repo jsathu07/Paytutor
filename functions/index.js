@@ -40,11 +40,14 @@ exports.updateTutorTransaction = functions.https.onCall(async (data, context) =>
         }
     })
     const batch = admin.firestore().batch();
-    tutor.forEach((value, key) => {
+    tutor.forEach(async (value, key) => {
+        await admin.firestore().collection("User").doc(data.userData.uid).collection("Tutor").doc(key).collection("Transaction").add({
+            createdDate: data.info.createdDate, amount: value, type: "studentPayment", id: data.info.id
+        })
+    })
+    tutor.forEach(async (value, key) => {
         const ref = admin.firestore().collection("User").doc(data.userData.uid).collection("Tutor").doc(key);
         batch.update(ref, { amount: admin.firestore.FieldValue.increment(value) });
-        const refTwo = admin.firestore().collection("User").doc(data.userData.uid).collection("Tutor").doc(key).collection("Transaction").doc(data.info.id)
-        batch.set(refTwo, { createdDate: data.info.createdDate, amount: value, type: "studentPayment" });
     })
     return batch.commit();
 })

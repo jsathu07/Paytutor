@@ -36,7 +36,8 @@ const CustomPaymentScreen = ({ navigation, route }) => {
                 value: parseInt(fee),
                 type: "custom",
                 classInfo: null,
-                duration: null
+                duration: null,
+                name
             }
             const batch = firestore().batch();
             const stdRef = firestore().collection("User").doc(userData.uid).collection("Student").doc(id).collection("Transaction").doc(transId);

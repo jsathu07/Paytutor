@@ -48,6 +48,7 @@ const TutorScreen = ({ navigation, route }) => {
                 createdDate: time,
                 amount: parseInt(amount),
                 type: "tutorSettlePayment",
+                id: transId
             }
             const batch = firestore().batch();
             const refOne = firestore().collection("User").doc(userData.uid).collection("Tutor").doc(id);

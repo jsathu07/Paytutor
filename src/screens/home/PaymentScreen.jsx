@@ -81,8 +81,8 @@ const PaymentScreen = ({ navigation, route }) => {
                 studentId: id,
                 value: total * currentMonths,
                 type: "payment",
-                classInfo,
-                duration: currentMonths
+                duration: currentMonths,
+                name: "Monthly payment"
             }
             const stdTransRef = firestore().collection("User").doc(userData.uid).collection("Student").doc(id).collection("Transaction").doc(transId);
             batch.set(stdTransRef, obj);
@@ -91,6 +91,8 @@ const PaymentScreen = ({ navigation, route }) => {
             const userRef = firestore().collection("User").doc(userData.uid);
             batch.update(userRef, { transCount: firestore.FieldValue.increment(1) });
             await batch.commit();
+            obj["classInfo"] = classInfo;
+            console.log(obj);
             if (userData.isSmsEnabled && userData.msgCount > 0) {
                 await functions().httpsCallable('sendMessage')({ student, amount: total * currentMonths, userData })
                 // .catch(() => {

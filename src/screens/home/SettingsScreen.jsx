@@ -51,20 +51,20 @@ const SettingsScreen = () => {
                     <View style={{ marginTop: hp("1%") }}>
                         <Switch text="Send SMS" text1="Messages for transactions" value={userData.isSmsEnabled} onValueChange={setSmsStatus} />
 
-                        {/* <SettingsItem name="mail-outline" primary={color.black0} secondary={color.grey0} text="Reload SMS" text1="Top up SMS balance" onPress={() => { }} /> */}
+                        <SettingsItem name="mail-outline" primary={color.black0} secondary={color.grey0} text="Reload SMS" text1="Top up SMS balance" onPress={() => { }} />
 
-                        {/* <SettingsItem name="card-outline" primary={color.black0} secondary={color.grey0} text="Pay subscription fee" text1="Make remaining payment" onPress={() => { }} /> */}
+                        <SettingsItem name="card-outline" primary={color.black0} secondary={color.grey0} text="Pay subscription fee" text1="Make remaining payment" onPress={() => { }} />
 
                         <SettingsItem name="information-circle-outline" primary={color.black0} secondary={color.grey0} text="Contact support" text1="Press to contact customer support" onPress={() => { Linking.openURL("https://api.whatsapp.com/send?text=&phone=+94762206823") }} />
 
                         <SettingsItem name="trash-bin-outline" primary={color.red1} secondary={color.red1} text="Sign Out" text1="Sign out from your account" onPress={signOut} />
                     </View>
 
-                    <Button text="press me" onPress={() => {
+                    {/* <Button text="press me" onPress={() => {
                         functions().httpsCallable('addAdmin')({ email: "mesathu3m@gmail.com", userData })
                             .then((e) => { console.log(e) })
                             .catch((e) => { console.log(e) })
-                    }} />
+                    }} /> */}
 
                     <View style={{ height: hp("5%") }}></View>
 
