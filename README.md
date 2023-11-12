@@ -6,7 +6,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/othneildrew/Best-README-Template">
-    <img src="https://raw.githubusercontent.com/jsathu07/Paytutor/main/logo.png" alt="Logo" width="400" height="100">
+    <img src="https://raw.githubusercontent.com/jsathu07/Paytutor/main/logo.png" alt="Logo" width="350" height="auto">
   </a>
 
   <h3 align="center">Pay Tutor</h3>
@@ -53,7 +53,6 @@ Here's why:
 - Payment Reminders: Automated reminders to help students stay on top of their fee payments.
 - Customizable Fee Structures: Easily update and manage fee structures to accommodate varying course plans.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Built With
 
@@ -61,7 +60,6 @@ Here's why:
 - [![Firebase][Firebase]][Firebase-url]
 - [![Redux][Redux]][Redux-url]
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Getting Started
 
@@ -88,7 +86,6 @@ Follow the below instructions to setup the app
    npm install
    ```
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Usage
 
@@ -96,24 +93,21 @@ This is a preview of the app on Android
 
 [Watch the video](https://github.com/jsathu07/Paytutor/raw/main/paytutor.mp4)
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## License
 
 Distributed under the MIT License. See `LICENSE.txt` for more information.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Contact
 
 Sathurshan - jsathu07@gmail.com
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 [LinkedIn]: https://img.shields.io/badge/linkedin-%230077B5.svg?style=for-the-badge&logo=linkedin&logoColor=white
 [LinkedIn-url]: https://www.linkedin.com/in/sathurshan-jegatheeswaran-638903282/
 [License]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=for-the-badge
-[License-url]: https://github.com/othneildrew/Best-README-Template/blob/master/LICENSE.txt
+[License-url]: https://github.com/jsathu07
 [ReactNative]: https://img.shields.io/badge/react_native-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB
 [ReactNative-url]: https://reactnative.dev/
 [Firebase]: https://img.shields.io/badge/Firebase-039BE5?style=for-the-badge&logo=Firebase&logoColor=white
