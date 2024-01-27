@@ -1,1 +1,2 @@
 changed min sdk and others in node_modules/bluetooth
+for ios permissions npx something and pod install
