@@ -1,0 +1,17 @@
+- percentage values decimal point is cut off
+- ui is not responsive migrate from wp hp
+- flat list large data handle
+- view qr exit no button
+- qr size not static
+- next month payment date moment
+- date diff use moment
+- tutor percentage 0
+- tutor percentage field not empty after registering class
+- admin mode not enabled
+- new Date() migrate to server timestamp
+- debounce dropdown alert
+- integrate payment gateway 
+- join a class after registration
+- remove from class
+- year filter in payment
+- tutor percentage dividing memory error
